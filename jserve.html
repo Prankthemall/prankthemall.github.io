@@ -1057,7 +1057,7 @@ function displayFolder(folder, contentpane, path) {
           link.href = item.getAttribute("href");
           link.target = "_blank";
         } else {
-          link.href = path + encodeName(item.getAttribute("name") || "");
+          link.href = path + encodeName(item.getAttribute("name"));
         }
         link.tabIndex = 0;
         link.addEventListener("focus", function(){
