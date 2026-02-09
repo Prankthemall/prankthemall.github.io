@@ -1057,7 +1057,7 @@ function displayFolder(folder, contentpane, path) {
           link.href = item.getAttribute("href");
           link.target = "_blank";
         } else {
-          link.href = path + encodeName(item.getAttribute("name"));
+         link.href = path + encodeName(item.getAttribute("name") || "");
         }
         link.tabIndex = 0;
         link.addEventListener("focus", function(){
@@ -1217,26 +1217,26 @@ document.addEventListener("DOMContentLoaded", function(){
     <folder name="Downloads" icon="downloads">
       <folder name="Adobe" icon="adobe">
         <folder name="Creative Suite 2" icon="adobe-cs2">
-          <link href="https://cdn.teknixstuff.com/raw/Acrobat3D_CS2_EN.exe" icon="adobe_extractor" name="Acrobat3D_CS2_EN.exe"></link>
-          <link href="https://cdn.teknixstuff.com/raw/AcrobatPro_CS2_EN.exe" icon="adobe_extractor" name="AcrobatPro_CS2_EN.exe"></link>
-          <link href="https://cdn.teknixstuff.com/raw/AfterEffects_CS2_MU.exe" icon="adobe_extractor" name="AfterEffects_CS2_EN.exe"></link>
-          <link href="https://cdn.teknixstuff.com/raw/Audition_2.0_EN.exe" icon="adobe_extractor" name="Audition_2.0_EN.exe"></link>
-          <link href="https://cdn.teknixstuff.com/raw/Encore_CS2_MU.exe" icon="adobe_extractor" name="Encore_CS2_MU.exe"></link>
-          <link href="https://cdn.teknixstuff.com/raw/GoLive_CS2_EN.exe" icon="adobe_extractor" name="GoLive_CS2_EN.exe"></link>
-          <link href="https://cdn.teknixstuff.com/raw/Illustrator_CS2_EN.exe" icon="adobe_extractor" name="Illustrator_CS2_EN.exe"></link>
-          <link href="https://cdn.teknixstuff.com/raw/InCopy_CS2_EN.exe" icon="adobe_extractor" name="InCopy_CS2_EN.exe"></link>
-          <link href="https://cdn.teknixstuff.com/raw/InDesign_CS2_EN.exe" icon="adobe_extractor" name="InDesign_CS2_EN.exe"></link>
-          <link href="https://cdn.teknixstuff.com/raw/Macromedia%20Contribute%203.11.msi" icon="msi" name="Macromedia Contribute 3.11.msi"></link>
-          <link href="https://cdn.teknixstuff.com/raw/Macromedia%20Dreamweaver%208.0.2.msi" icon="msi" name="Macromedia Dreamweaver 8.0.2.msi"></link>
-          <link href="https://cdn.teknixstuff.com/raw/Macromedia%20Fireworks%208.msi" icon="msi" name="Macromedia Fireworks 8.msi"></link>
-          <link href="https://cdn.teknixstuff.com/raw/Macromedia%20Flash%208.msi" icon="msi" name="Macromedia Flash 8.msi"></link>
-          <link href="https://cdn.teknixstuff.com/raw/Photoshop_CS2_EN.exe" icon="adobe_extractor" name="Photoshop_CS2_EN.exe"></link>
-          <link href="https://cdn.teknixstuff.com/raw/PremierePro_CS2_MU.exe" icon="adobe_extractor" name="PremierePro_CS2_MU.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/Acrobat3D_CS2_EN.exe" icon="adobe_extractor" name="Acrobat3D_CS2_EN.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/AcrobatPro_CS2_EN.exe" icon="adobe_extractor" name="AcrobatPro_CS2_EN.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/AfterEffects_CS2_MU.exe" icon="adobe_extractor" name="AfterEffects_CS2_EN.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/Audition_2.0_EN.exe" icon="adobe_extractor" name="Audition_2.0_EN.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/Encore_CS2_MU.exe" icon="adobe_extractor" name="Encore_CS2_MU.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/GoLive_CS2_EN.exe" icon="adobe_extractor" name="GoLive_CS2_EN.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/Illustrator_CS2_EN.exe" icon="adobe_extractor" name="Illustrator_CS2_EN.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/InCopy_CS2_EN.exe" icon="adobe_extractor" name="InCopy_CS2_EN.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/InDesign_CS2_EN.exe" icon="adobe_extractor" name="InDesign_CS2_EN.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/Macromedia%20Contribute%203.11.msi" icon="msi" name="Macromedia Contribute 3.11.msi"></link>
+          <link href="https://cdn.teknixstuff.com/u/Macromedia%20Dreamweaver%208.0.2.msi" icon="msi" name="Macromedia Dreamweaver 8.0.2.msi"></link>
+          <link href="https://cdn.teknixstuff.com/u/Macromedia%20Fireworks%208.msi" icon="msi" name="Macromedia Fireworks 8.msi"></link>
+          <link href="https://cdn.teknixstuff.com/u/Macromedia%20Flash%208.msi" icon="msi" name="Macromedia Flash 8.msi"></link>
+          <link href="https://cdn.teknixstuff.com/u/Photoshop_CS2_EN.exe" icon="adobe_extractor" name="Photoshop_CS2_EN.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/PremierePro_CS2_MU.exe" icon="adobe_extractor" name="PremierePro_CS2_MU.exe"></link>
           <rtf docid="adobe-cs2-readme" name="readme.txt" icon="txt"></rtf>
         </folder>
         <folder name="Creative Suite 3" icon="adobe-cs3">
-          <link href="https://cdn.teknixstuff.com/raw/ADBESTAMCS3_WWE.exe" icon="adobe_extractor" name="ADBESTAMCS3_WWE.exe"></link>
-          <link href="https://cdn.teknixstuff.com/raw/Audition_3.0_MU.exe" icon="adobe_extractor" name="Audition_3.0_MU.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/ADBESTAMCS3_WWE.exe" icon="adobe_extractor" name="ADBESTAMCS3_WWE.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/Audition_3.0_MU.exe" icon="adobe_extractor" name="Audition_3.0_MU.exe"></link>
         </folder>
         <folder name="Creative Suite 4" icon="adobe-cs4">
           <link href="https://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/Applications/MastCol/CS4/Win/ADBESTAMCS4_LS1.exe" icon="adobe_extractor_cs4" name="ADBESTAMCS4_LS1.exe"></link>
@@ -1245,8 +1245,8 @@ document.addEventListener("DOMContentLoaded", function(){
           <link href="https://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/Applications/MastCol/CS4/Win/ADBESTAMCS4_LS4.exe" icon="adobe_extractor_cs4" name="ADBESTAMCS4_LS4.exe"></link>
           <link href="https://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/Applications/MastCol/CS4/Win/ADBESTAMCS4_LS4.7z" icon="7z" name="ADBESTAMCS4_LS4.7z"></link>
           <link href="https://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/Applications/MastCol/CS4/Win/STAMCS4_Cont_LS4.exe" icon="adobe_extractor_cs4" name="STAMCS4_Cont_LS4.exe"></link>
-          <link href="https://cdn.teknixstuff.com/raw/Director11.5.exe" icon="adobe_extractor_cs4" name="Director11.5.exe"></link>
-          <link href="https://cdn.teknixstuff.com/raw/Director-11.5.9.zip" icon="zip" name="Director-11.5.9.zip"></link>
+          <link href="https://cdn.teknixstuff.com/u/Director11.5.exe" icon="adobe_extractor_cs4" name="Director11.5.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/Director-11.5.9.zip" icon="zip" name="Director-11.5.9.zip"></link>
           <rtf docid="adobe-cs4-readme" name="readme.txt" icon="txt"></rtf>
         </folder>
         <folder name="Creative Suite 5" icon="adobe-cs5">
@@ -1258,7 +1258,7 @@ document.addEventListener("DOMContentLoaded", function(){
           <link href="https://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/STAM/CS5_5/win32/MasterCollection_CS5_5_LS1.7z" icon="7z" name="MasterCollection_CS5_5_LS1.7z"></link>
           <link href="https://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/STAM/CS5_5/win32/MasterCollection_CS5_5_LS4.exe" icon="adobe_extractor_cs4" name="MasterCollection_CS5_5_LS4.exe"></link>
           <link href="https://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/STAM/CS5_5/win32/MasterCollection_CS5_5_LS4.7z" icon="7z" name="MasterCollection_CS5_5_LS4.7z"></link>
-          <link href="https://cdn.teknixstuff.com/raw/AdobeGenP.exe" icon="genp" name="AdobeGenP.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/AdobeGenP.exe" icon="genp" name="AdobeGenP.exe"></link>
           <rtf docid="adobe-cs5-readme" name="readme.txt" icon="txt"></rtf>
         </folder>
         <folder name="Creative Suite 6" icon="adobe-cs6">
@@ -1266,8 +1266,8 @@ document.addEventListener("DOMContentLoaded", function(){
           <link href="http://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/STAM/CS6/win32/MasterCollection_CS6_LS16.7z" icon="7z" name="MasterCollection_CS6_LS16.7z"></link>
           <link href="http://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/STAM/CS6/win32/MasterCollection_CS6_LS4.exe" icon="adobe_extractor_cs4" name="MasterCollection_CS6_LS4.exe"></link>
           <link href="http://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/STAM/CS6/win32/MasterCollection_CS6_LS4.7z" icon="7z" name="MasterCollection_CS6_LS4.7z"></link>
-          <link href="https://cdn.teknixstuff.com/raw/Adobe.Director.12.0.exe" icon="adobe_extractor_cs4" name="Adobe.Director.12.0.exe">
-          <link href="https://cdn.teknixstuff.com/raw/AdobeGenP.exe" icon="genp" name="AdobeGenP.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/Adobe.Director.12.0.exe" icon="adobe_extractor_cs4" name="Adobe.Director.12.0.exe">
+          <link href="https://cdn.teknixstuff.com/u/AdobeGenP.exe" icon="genp" name="AdobeGenP.exe"></link>
           <rtf docid="adobe-cs6-readme" name="readme.txt" icon="txt"></rtf>
         </folder>
         <folder name="Creative Cloud 2013" icon="adobe-cc-2013">
@@ -1307,64 +1307,66 @@ document.addEventListener("DOMContentLoaded", function(){
           <link href="http://prdl-download.adobe.com/Flash%20Builder/C06A256DD8FD4DF186D90CE0ADCF0B2C/1509477139530/FlashBuilder_4_7_LS10_win64.exe" icon="adobe_extractor_cs4" name="FlashBuilder_4_7_LS10_win64.exe"></link>
           <link href="http://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/FWKS/12/win32/Fireworks_12_LS4.exe" icon="adobe_extractor_cs4" name="Fireworks_12_LS4.exe"></link>
           <link href="http://prdl-download.adobe.com/ExtendScriptToolkit/85C17E5FC8B34A7B8483796F0367F97C/1509443329438/AdobeExtendScriptToolkit_4_LS22.exe" icon="adobe-extendscript-setup" name="AdobeExtendScriptToolkit_4_LS22.exe"></link>
-          <link href="https://cdn.teknixstuff.com/raw/AdobeGenP.exe" icon="genp" name="AdobeGenP.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/AdobeGenP.exe" icon="genp" name="AdobeGenP.exe"></link>
         </folder>
       </folder>
       <folder name="Hex-Rays" icon="hexrays">
-          <link href="https://cdn.teknixstuff.com/raw/ida-pro_92_x64win.exe" icon="ida" name="ida-pro_92_x64win.exe"></link>
-          <link href="https://cdn.teknixstuff.com/raw/ida-pro_91_x64win.exe" icon="ida" name="ida-pro_91_x64win.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/ida-pro_92_x64win.exe" icon="ida" name="ida-pro_92_x64win.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/ida-pro_91_x64win.exe" icon="ida" name="ida-pro_91_x64win.exe"></link>
       </folder>
       <folder name="Microsoft" icon="microsoft">
         <folder name="Windows" icon="microsoft-windows">
-          <link href="https://cdn.teknixstuff.com/raw/en_windows_7_ultimate_updated_2025-06_hwp.iso" icon="iso" name="en_windows_7_ultimate_updated_2025-06_hwp.iso"></link>
+          <link href="https://cdn.teknixstuff.com/u/en_windows_7_ultimate_updated_2025-06_hwp.iso" icon="iso" name="en_windows_7_ultimate_updated_2025-06_hwp.iso"></link>
         </folder>
         <folder name="Office" icon="microsoft-office">
-          <link href="https://cdn.teknixstuff.com/raw/en_office_11.0.8453.0_fullsuite.exe" icon="microsoft-office-2003" name="en_office_11.0.8453.0_fullsuite.exe"></link>
-          <link href="https://cdn.teknixstuff.com/raw/en_office_14.0.7268.5000_fullsuite_x64.exe" icon="microsoft-office-2010" name="en_office_14.0.7268.5000_fullsuite_x64.exe"></link>
-          <link href="https://cdn.teknixstuff.com/raw/en_office_14.0.7268.5000_fullsuite_x86.exe" icon="microsoft-office-2010" name="en_office_14.0.7268.5000_fullsuite_x86.exe"></link>
-          <link href="https://cdn.teknixstuff.com/raw/Microsoft%20Office%202010%20Portable.exe" icon="microsoft-office" name="Microsoft Office 2010 Portable.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/en_office_11.0.8453.0_fullsuite.exe" icon="microsoft-office-2003" name="en_office_11.0.8453.0_fullsuite.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/en_office_14.0.7268.5000_fullsuite_x64.exe" icon="microsoft-office-2010" name="en_office_14.0.7268.5000_fullsuite_x64.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/en_office_14.0.7268.5000_fullsuite_x86.exe" icon="microsoft-office-2010" name="en_office_14.0.7268.5000_fullsuite_x86.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/Microsoft%20Office%202010%20Portable.exe" icon="microsoft-office" name="Microsoft Office 2010 Portable.exe"></link>
         </folder>
       </folder>
       <folder name="VMware" icon="vmware">
         <folder name="ThinApp" icon="vmware-thinapp">
-          <link href="https://cdn.teknixstuff.com/raw/VMware-ThinApp-2312-23148499.msi" icon="msi" name="VMware-ThinApp-2312-23148499.msi"></link>
-          <link href="https://cdn.teknixstuff.com/raw/VMware-ThinApp-5.2.9-17340778.msi" icon="msi" name="VMware-ThinApp-5.2.9-17340778.msi"></link>
-          <link href="https://cdn.teknixstuff.com/raw/VMware-ThinApp-5.2.3-6945559.msi" icon="msi" name="VMware-ThinApp-5.2.3-6945559.msi"></link>
+          <link href="https://cdn.teknixstuff.com/u/VMware-ThinApp-2312-23148499.msi" icon="msi" name="VMware-ThinApp-2312-23148499.msi"></link>
+          <link href="https://cdn.teknixstuff.com/u/VMware-ThinApp-5.2.9-17340778.msi" icon="msi" name="VMware-ThinApp-5.2.9-17340778.msi"></link>
+          <link href="https://cdn.teknixstuff.com/u/VMware-ThinApp-5.2.3-6945559.msi" icon="msi" name="VMware-ThinApp-5.2.3-6945559.msi"></link>
         </folder>
         <folder name="Workstation" icon="vmware-workstation">
-          <link href="https://cdn.teknixstuff.com/raw/VMware-workstation-full-16.2.5-20904516.exe" icon="vmware-workstation-setup" name="VMware-workstation-full-16.2.5-20904516.exe"></link>
-          <link href="https://cdn.teknixstuff.com/raw/VMware-workstation-full-16.1.2-17966106.exe" icon="vmware-workstation-setup" name="VMware-workstation-full-16.1.2-17966106.exe"></link>
-          <link href="https://cdn.teknixstuff.com/raw/VMware-workstation-full-15.5.7-17171714.exe" icon="vmware-workstation-setup" name="VMware-workstation-full-15.5.7-17171714.exe"></link>
-          <link href="https://cdn.teknixstuff.com/raw/VMware-workstation-full-10.0.7-2844087.exe" icon="setup" name="VMware-workstation-full-10.0.7-2844087.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/VMware-workstation-full-16.2.5-20904516.exe" icon="vmware-workstation-setup" name="VMware-workstation-full-16.2.5-20904516.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/VMware-workstation-full-16.1.2-17966106.exe" icon="vmware-workstation-setup" name="VMware-workstation-full-16.1.2-17966106.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/VMware-workstation-full-15.5.7-17171714.exe" icon="vmware-workstation-setup" name="VMware-workstation-full-15.5.7-17171714.exe"></link>
+          <link href="https://cdn.teknixstuff.com/u/VMware-workstation-full-10.0.7-2844087.exe" icon="setup" name="VMware-workstation-full-10.0.7-2844087.exe"></link>
           <rtf docid="vmware-workstation-readme" name="readme.txt" icon="txt"></rtf>
         </folder>
       </folder>
       <folder name="Prism Launcher" icon="prism-launcher">
-        <link href="https://cdn.teknixstuff.com/raw/PrismLauncher_9.4_QT5_NoDRM.zip" icon="zip" name="PrismLauncher_9.4_QT5_NoDRM-Portable.zip"></link>
-        <link href="https://cdn.teknixstuff.com/raw/PrismLauncher_9.4_QT5_NoDRM-Setup.exe" icon="prism-launcher" name="PrismLauncher_9.4_QT5_NoDRM-Setup.exe"></link>
+        <link href="https://cdn.teknixstuff.com/u/PrismLauncher_9.4_QT5_NoDRM.zip" icon="zip" name="PrismLauncher_9.4_QT5_NoDRM-Portable.zip"></link>
+        <link href="https://cdn.teknixstuff.com/u/PrismLauncher_9.4_QT5_NoDRM-Setup.exe" icon="prism-launcher" name="PrismLauncher_9.4_QT5_NoDRM-Setup.exe"></link>
       </folder>
       <folder name="Internet Download Manager" icon="internet-download-manager">
-        <link href="https://cdn.teknixstuff.com/raw/idman642build57a.exe" icon="idm-setup" name="idman642build57a.exe"></link>
-        <link href="https://cdn.teknixstuff.com/raw/idman642build52a.exe" icon="idm-setup" name="idman642build52a.exe"></link>
-        <link href="https://cdn.teknixstuff.com/raw/idman642build50o.exe" icon="idm-setup" name="idman642build50o.exe"></link>
-        <link href="https://cdn.teknixstuff.com/raw/idman642build48o.exe" icon="idm-setup" name="idman642build48o.exe"></link>
-        <link href="https://cdn.teknixstuff.com/raw/idman641build2o.exe" icon="idm-setup" name="idman641build2o.exe"></link>
+        <link href="https://cdn.teknixstuff.com/u/idman642build57a.exe" icon="idm-setup" name="idman642build57a.exe"></link>
+        <link href="https://cdn.teknixstuff.com/u/idman642build52a.exe" icon="idm-setup" name="idman642build52a.exe"></link>
+        <link href="https://cdn.teknixstuff.com/u/idman642build50o.exe" icon="idm-setup" name="idman642build50o.exe"></link>
+        <link href="https://cdn.teknixstuff.com/u/idman642build48o.exe" icon="idm-setup" name="idman642build48o.exe"></link>
+        <link href="https://cdn.teknixstuff.com/u/idman641build2o.exe" icon="idm-setup" name="idman641build2o.exe"></link>
       </folder>
       <folder name="WinRAR" icon="winrar">
-        <link href="https://cdn.teknixstuff.com/raw/winrar-x64-713.exe" icon="winrar" name="winrar-x64-713.exe"></link>
+        <link href="https://cdn.teknixstuff.com/u/winrar-x64-713.exe" icon="winrar" name="winrar-x64-713.exe"></link>
       </folder>
       <folder name="Node.js" icon="nodejs">
-        <link href="https://cdn.teknixstuff.com/raw/node-v24.11.1-x64.msi" icon="msi" name="node-v24.11.1-x64.msi"></link>
+        <link href="https://125-4.download.real-debrid.com/d/FWA74SKI5Y524/node-v24.11.1-x64.msi" icon="msi" name="node-v24.11.1-x64.msi"></link>
       </folder>
+	  <folder name="Lmao Socialist Company" icon="lsc">
+        <div id="sec-cnt"></div>
       </folder>
       <folder name="ArcaOS" icon="arcaos">
-        <link href="https://cdn.teknixstuff.com/raw/ArcaOS-5.0.iso" icon="iso" name="ArcaOS-5.0.iso"></link>
+        <link href="https://123-4.download.real-debrid.com/d/VBR5G35FFMCEQ/ArcaOS-5.0.iso" icon="iso" name="ArcaOS-5.0.iso"></link>
       </folder>
       <folder name="Inpaint" icon="inpaint">
-        <link href="https://cdn.teknixstuff.com/raw/Inpaint%2011.0.1.exe" icon="msi" name="Inpaint 11.0.1.exe"></link>
+        <link href="https://cdn.teknixstuff.com/u/Inpaint%2011.0.1.exe" icon="msi" name="Inpaint 11.0.1.exe"></link>
       </folder>
       <folder name="Office Tab" icon="officetab">
-        <link href="https://cdn.teknixstuff.com/raw/OfficeTabPro_18.10.msi" icon="msi" name="OfficeTabPro_18.10.msi"></link>
+        <link href="https://cdn.teknixstuff.com/u/OfficeTabPro_18.10.msi" icon="msi" name="OfficeTabPro_18.10.msi"></link>
       </folder>
       <folder name="StartIsBack" icon="startisback">
         <link href="https://cdn.teknixstuff.com/raw/StartIsBack212_setup.exe" icon="sibsetup" name="StartIsBack212_setup.exe"></link>
@@ -1373,16 +1375,16 @@ document.addEventListener("DOMContentLoaded", function(){
         <link href="https://cdn.teknixstuff.com/raw/StartAllBack_3.9.20_setup.exe" icon="sabsetup" name="StartAllBack_3.9.20_setup.exe"></link>
       </folder>
       <folder name="NTLite" icon="ntlite">
-        <link href="https://cdn.teknixstuff.com/raw/NTLite_v2.1.1.7917_x64.exe" name="NTLite_v2.1.1.7917_x64.exe" icon="ntlite"></link>
+        <link href="https://20-4.download.real-debrid.com/d/HNU7ORDDTGOZA/NTLite_v2.1.1.7917_x64.exe" name="NTLite_v2.1.1.7917_x64.exe" icon="ntlite"></link>
       </folder>
       <folder name="Virtual Audio Cable" icon="virtual-audio-cable">
-        <link href="https://cdn.teknixstuff.com/raw/Virtual-Audio-Cable-V4.70.exe" name="Virtual-Audio-Cable-V4.70.exe" icon="setup95"></link>
+        <link href="https://100-4.download.real-debrid.com/d/FLFQHDHPUCK52/Virtual-Audio-Cable-V4.70.exe" name="Virtual-Audio-Cable-V4.70.exe" icon="setup95"></link>
       </folder>
       <folder name="Sandboxie-Plus" icon="sbieplus">
         <link href="https://cdn.teknixstuff.com/raw/sbiekey.exe" name="sbiekey.exe" icon="sbiekey"></link>
       </folder>
       <folder name="MakeMKV" icon="makemkv">
-        <link href="https://cdn.teknixstuff.com/raw/crackmkv.exe" name="crackmkv.exe" icon="makemkv"></link>
+        <link href="http://cdn.teknixstuff.com/raw/crackmkv.exe" name="crackmkv.exe" icon="makemkv"></link>
       </folder>
     </folder>
   </folder>
@@ -1400,7 +1402,7 @@ document.addEventListener("DOMContentLoaded", function(){
   </folder>
   <folder name="Computer" icon="computer" open>
     <groupheader name="Hard Disk Drives"></groupheader>
-    <folder name="Windows 10 (C:)" icon="windrive">
+    <folder name="Windows (C:)" icon="windrive">
 	  <folder name="OpenGlass" icon="folder">
       </folder>
       <folder name="Program Files" icon="folder">
