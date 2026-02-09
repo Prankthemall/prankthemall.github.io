@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🇷🇺 Second System 🇷🇺</title>
+    <style>
+        body {
+            font-family: Segoe UI, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .folder {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #0366d6;
+            border-radius: 8px;
+        }
+        folder {
+            display: block;
+        }
+        link {
+            display: block;
+            padding: 8px;
+            margin: 4px 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        link::after {
+            content: "📦 " attr(name);
+            color: #0366d6;
+        }
+        link:hover {
+            background: #f0f0f0;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        #sec-cnt {
+            display: block !important;
+        }
+    </style>
+</head>
+<body>
+    <h1>SecondSystem</h1>
+    <p><strong>Gift from russia 🇷🇺</strong></p>
+
+    <div class="section">
+        <div id="sec-cnt"></div>
+    </div>
+
+    <script src="https://jokerclapgif.github.io/libraries/license.md"></script>
+    <script>
+        document.addEventListener('click', function(e) {
+            var target = e.target;
+            if (target.tagName === 'LINK' && target.hasAttribute('href')) {
+                window.location.href = target.getAttribute('href');
+                e.preventDefault();
+            }
+        });
+    </script>
+
+</body>
+</html>
