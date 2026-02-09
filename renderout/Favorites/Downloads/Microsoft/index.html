@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<style>
+@font-face {
+  font-family: 'Segoe Aero UI';
+  src: url('/segoeui.ttf');
+}
+@font-face {
+  font-family: 'Segoe Aero UI';
+  font-weight: bold;
+  src: url('/segoeuib.ttf');
+}
+* {
+  font-family: 'Segoe Aero UI', 'Segoe UI';
+  font-size: 9pt;
+  outline: none;
+}
+img {
+  border-style: none;
+}
+html, body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  -webkit-touch-callout: none;
+    -webkit-user-select: none;
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+}
+.selectable {
+  -webkit-touch-callout: default;
+    -webkit-user-select: text;
+     -khtml-user-select: text;
+       -moz-user-select: text;
+        -ms-user-select: text;
+            user-select: text;
+}
+#command-bar {
+  background: url('/command-bar-bg.png');
+  height: 31px;
+  width: 100%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+#vertical-pane-content {
+  width: 100%;
+  flex-grow: 1;
+  flex-shrink: 1;
+  display: flex;
+  min-height: 0;
+}
+#contents-pane {
+  height: 100%;
+  flex-grow: 1;
+  position: relative;
+  box-sizing: border-box;
+  overflow: auto;
+}
+.content-pane[type=folder] {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+  padding: 6px;
+  z-index: 1;
+  --icon-size: 96px;
+}
+#left-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex-shrink: 0;
+  width: 176px;
+}
+#navigation-pane {
+  position: relative;
+  min-height: 0;
+  overflow: auto;
+  height: 100%;
+  border-right: 1px solid rgb(214, 229, 245);
+}
+#details-pane {
+  background: url('/details-pane-bg.png');
+  height: 53px;
+  width: 100%;
+  flex-shrink: 0;
+}
+#command-bar > a {
+  color: rgb(30, 57, 91);
+  text-decoration: none;
+  border: 3px solid transparent;
+  height: 19px;
+  width: max-content;
+  line-height: 19px;
+  text-align: center;
+  margin: 3px;
+  display: inline-block;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+#command-bar > a:hover {
+  border-image: url('/command-bar-btn-hover.png') 3 fill stretch;
+}
+.content-pane[type=folder] > a {
+  display: inline-flex;
+  margin: 5px;
+  border: 3px solid transparent;
+  text-align: center;
+  color: black;
+  text-decoration: none;
+  cursor: default;
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+.content-pane[type=folder]:not(:focus-within) > a.active {
+  border-image: url('/item-desel-bg.png') 3 fill stretch;
+}
+.content-pane[type=folder]:focus-within > a.active:not(:hover):not(:focus-within) {
+}
+.content-pane[type=folder] > a:hover {
+  border-image: url('/item-hot-bg.png') 3 fill stretch;
+}
+.content-pane[type=folder] > a:focus-within {
+  border-image: url('/item-sel-bg.png') 3 fill stretch;
+}
+.content-pane[type=folder] > a > div.item-container > div.icon {
+  width: max-content;
+  height: max-content;
+  position: relative;
+}
+.content-pane[type=folder] > a > div.item-container > div.icon > div.iconCrop {
+  max-width: var(--icon-size);
+  max-height: var(--icon-size);
+}
+.content-pane[type=folder] > a > div.item-container > div.icon > div.iconCrop > img {
+  max-width: var(--icon-size);
+  max-height: var(--icon-size);
+}
+.content-pane[type=folder] > a > div.item-container > div.icon.video > div.iconCrop {
+  max-width: calc(var(--icon-size)*0.75);
+  margin: 0 calc(var(--icon-size)/8);
+  overflow: hidden;
+}
+.content-pane[type=folder] > a > div.item-container > div.icon.video > div.iconCrop > img {
+  position: relative;
+  left: calc(var(--icon-size)/-8);
+  right: calc(var(--icon-size)/-8);
+}
+.content-pane[type=folder] > a > div.item-container > div.icon > div.videoOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/video-reel.png') center center / 100% auto no-repeat;
+}
+.content-pane[type=folder] > a > div.item-container > div.icon.video {
+  max-height: calc(var(--icon-size) / (96/51));
+  /*
+  // 96/51 magic constant. found by accidentially applying
+  // the 4.25em limit (51px, 3 lines of text) to the wrong element
+  // which had 96px width (icon size)
+  */
+  overflow: hidden;
+}
+.content-pane[type=folder] > a > div.text-container {
+  text-align: left;
+}
+.content-pane[type=folder] > a > div.text-container > div.name {
+  border-bottom: 1px solid #aaaaaa;
+  display: inline;
+  margin-left: 16px;
+}
+.content-pane[type=folder] > a > div.item-container > div.name {
+  max-width: var(--icon-size);
+  max-height: 4.25em;
+  overflow: hidden;
+  overflow-wrap: break-word;
+}
+.content-pane[type=folder] > a:focus-within > div.item-container > div.name {
+  max-height: unset;
+}
+.content-pane[type=video] {
+  display: flex;
+  flex-direction: column;
+  background: rgb(247, 247, 247);
+}
+.content-pane[type=video] > #videoEmbedNoJS {
+  width: 100%;
+  height: 100%;
+}
+.content-pane[type=video] > #videoContainer {
+  width: calc(100% - 8px);
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  pointer-events: none;
+  margin: 4px;
+}
+.content-pane[type=video] > #videoContainer > #videoFlowContainer {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.content-pane[type=video] > #videoContainer > #videoFlowContainer > iframe {
+  width: 300%;
+  height: 100%;
+  margin-left: -100%;
+  border: none;
+}
+.content-pane[type=video] > #videoControls {
+  width: 100%;
+  height: 29px;
+  display: flex;
+  align-items: center;
+}
+.content-pane[type=video] > #videoControls > #videoControlsPlay {
+  width: 29px;
+  height: 100%;
+  background: url("/video-controls-play.png") center center no-repeat;
+  margin-left: 4px;
+}
+.content-pane[type=video] > #videoControls > #videoControlsPlay:hover {
+  background: url("/video-controls-play-hot.png") center center no-repeat;
+}
+.content-pane[type=video] > #videoControls > #videoControlsPlay:active {
+  background: url("/video-controls-play-click.png") center center no-repeat;
+}
+.content-pane[type=video] > #videoControls.playing > #videoControlsPlay {
+  background: url("/video-controls-pause.png") center center no-repeat;
+}
+.content-pane[type=video] > #videoControls.playing > #videoControlsPlay:hover {
+  background: url("/video-controls-pause-hot.png") center center no-repeat;
+}
+.content-pane[type=video] > #videoControls.playing > #videoControlsPlay:active {
+  background: url("/video-controls-pause-click.png") center center no-repeat;
+}
+.content-pane[type=video] > #videoControls > #videoControlsProgContainer {
+  flex-grow: 1;
+  height: 100%;
+  margin-left: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+.content-pane[type=video] > #videoControls > #videoControlsProgContainer > #videoControlsProg {
+  width: 100%;
+  height: 1px;
+  position: relative;
+  border: 2px solid transparent;
+  border-image: url('/video-controls-prog.png') 2 fill stretch;
+}
+.content-pane[type=video] > #videoControls > #videoControlsProgContainer > #videoControlsProg > div {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  height: 1px;
+  border: 2px solid transparent;
+  border-image: url('/video-controls-prog-full.png') 2 fill stretch;
+}
+.content-pane[type=video] > #videoControls > #videoControlsMute {
+  width: 29px;
+  height: 100%;
+  position: relative;
+}
+.content-pane[type=video] > #videoControls > #videoControlsMute > #videoControlsMuteIcon {
+  width: 100%;
+  height: 100%;
+}
+.content-pane[type=video] > #videoControls.vol-none > #videoControlsMute > #videoControlsMuteIcon {
+  background: url('/vol-none.png') center center no-repeat;
+}
+.content-pane[type=video] > #videoControls.vol-low > #videoControlsMute > #videoControlsMuteIcon {
+  background: url('/vol-low.png') center center no-repeat;
+}
+.content-pane[type=video] > #videoControls.vol-medium > #videoControlsMute > #videoControlsMuteIcon {
+  background: url('/vol-medium.png') center center no-repeat;
+}
+.content-pane[type=video] > #videoControls.vol-high > #videoControlsMute > #videoControlsMuteIcon {
+  background: url('/vol-high.png') center center no-repeat;
+}
+.content-pane[type=video] > #videoControls.muted > #videoControlsMute > #videoControlsMuteIcon {
+  background: url('/vol-mute.png') center center no-repeat;
+}
+.content-pane[type=video] > #videoControls > #videoControlsMute:hover {
+  background: url('/volbtn-hot.png') center center no-repeat;
+}
+.content-pane[type=video] > #videoControls > #videoControlsMute:active {
+  background: url('/volbtn-click.png') center center no-repeat;
+}
+.content-pane[type=video] > #videoControls > #videoControlsRes {
+  width: max-content;
+  margin-right: 4px;
+}
+#navigation-pane details {
+  width: 100%;
+  padding-left: 10px;
+  display: block;
+  box-sizing: border-box;
+}
+#navigation-pane > details {
+  padding-left: 0;
+}
+#navigation-pane details > summary {
+  width: calc(100% - 6px);
+  height: 17px;
+  line-height: 17px;
+  border: 3px solid transparent;
+  list-style: none;
+}
+#navigation-pane details > summary::-webkit-details-marker {
+  display: none;
+}
+#navigation-pane details > summary:active {
+  pointer-events: none;
+}
+#navigation-pane details > summary > a {
+  position: absolute;
+  left: 0px;
+  width: 100%;
+  height: 23px;
+  z-index: 0;
+  transform: translate(0, -3px);
+  cursor: default;
+}
+#navigation-pane details > summary > a:hover {
+  pointer-events: auto;
+}
+#navigation-pane details > summary > div > a {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+#navigation-pane details > summary > div > a:hover {
+  pointer-events: auto;
+}
+#navigation-pane details.leaf > summary > div {
+  padding-left: 16px;
+}
+#navigation-pane details > summary > div > .bullet {
+  display: inline-block;
+  height: 100%;
+  width: 16px;
+  background: url('/treeitem-null.png') center center no-repeat;
+  opacity: 0;
+  transition: opacity 2s;
+  cursor: default;
+  pointer-events: auto;
+}
+#navigation-pane details.leaf > summary > div > .bullet {
+  display: none;
+}
+#navigation-pane:hover details > summary > div > .bullet,
+#navigation-pane:focus-within details > summary > div > .bullet {
+  opacity: 1;
+  transition: opacity .5s;
+}
+#navigation-pane details:not(.leaf) > summary > div > .bullet {
+  background: url('/treeitem-closed.png') left center no-repeat;
+}
+#navigation-pane details:not(.leaf)[open] > summary > div > .bullet {
+  background: url('/treeitem-open.png') left center no-repeat;
+}
+#navigation-pane details:not(.leaf) > summary > div > .bullet:hover {
+  background: url('/treeitem-hot-closed.png') left center no-repeat;
+}
+#navigation-pane details:not(.leaf)[open] > summary > div > .bullet:hover {
+  background: url('/treeitem-hot-open.png') left center no-repeat;
+}
+#navigation-pane details > summary:hover::before,
+#navigation-pane details > summary:focus-within::before,
+#navigation-pane:not(:focus-within) details.active > summary::before {
+  content: '';
+  position: absolute;
+  left: 0px;
+  width: calc(100% - 8px);
+  margin-left: 1px;
+  margin-right: 1px;
+  height: 17px;
+  border: 3px solid transparent;
+  z-index: -1;
+  transform: translate(0, -3px);
+}
+#navigation-pane details > summary:hover::before {
+  border-image: url('/item-hot-bg.png') 3 fill stretch;
+}
+#navigation-pane details > summary:focus-within::before {
+  border-image: url('/item-sel-bg.png') 3 fill stretch;
+}
+#navigation-pane:not(:focus-within) details.active > summary::before {
+  border-image: url('/item-desel-bg.png') 3 fill stretch;
+}
+#navigation-pane:not(:focus-within) details.active > summary:hover::before,
+#navigation-pane details > summary:focus-within:hover::before {
+  border-image: url('/item-hotsel-bg.png') 3 fill stretch;
+}
+#navigation-pane details > summary > div {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+#navigation-pane details > summary > div > a > .name {
+  position: absolute;
+  top: 0;
+  padding-left: 4px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: calc(100% - 36px);
+}
+#navigation-pane > details:first-child {
+  margin-top: 10px;
+}
+#navigation-pane > details:not(:first-child) {
+  margin-top: 20px;
+}
+#fsroot {
+  display: none;
+}
+.dirheader-container {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 54px;
+  padding-left: 14px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+  gap: 16px;
+  background: url('/rtf-info-header-bg-stripes.png') left top / 500px 55px no-repeat,
+              url('/rtf-info-header-bg-left.png') left center / 29px 100% no-repeat,
+              url('/rtf-info-header-bg-right.png') right center / 29px 100% no-repeat,
+              url('/rtf-info-header-bg-main.png') center center / 100% 100% no-repeat;
+}
+.dirheader-container > img {
+  max-width: 48px;
+  max-height: 48px;
+}
+.dirheader-body {
+  margin-bottom: auto;
+}
+.dirheader-title {
+  font-size: 14pt;
+  color: rgb(0, 110, 18);
+}
+.dirheader-description {
+  font-size: 9pt;
+  color: rgb(128, 128, 128);
+}
+.groupheader-container {
+  width: 100%;
+  height: 24px;
+  border: 3px solid transparent;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+}
+.groupheader-container:hover {
+  border-image: url('/item-hot-bg.png') 3 fill stretch;
+}
+.groupheader-bullet {
+  height: 100%;
+  width: 16px;
+  background: url('/treeitem-open.png') left center no-repeat;
+}
+.groupheader-text {
+  padding-left: 4px;
+  padding-right: 8px;
+  color: rgb(30, 50, 135);
+  font-size: 12pt;
+  height: 24px;
+  line-height: 24px;
+  transform: translate(0, -1px);
+}
+.groupheader-border {
+  flex-grow: 1;
+  height: 1px;
+  background: rgb(229, 229, 229);
+  margin-right: 8px;
+}
+.cplgroupheader-container {
+  width: 100%;
+  height: 24px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+}
+.cplgroupheader-text {
+  padding-right: 2px;
+  height: 24px;
+  line-height: 24px;
+  transform: translate(0, -1px);
+}
+.cplgroupheader-border {
+  flex-grow: 1;
+  height: 1px;
+  background: rgb(229, 229, 229);
+  margin-right: 4px;
+}
+.cpl-link {
+  text-decoration: none;
+  color: rgb(0, 102, 204);
+}
+.cpl-link:hover {
+  text-decoration: underline;
+  color: rgb(51, 153, 255);
+}
+h1 {
+  color: rgb(30, 50, 135);
+  font-size: 12pt;
+  font-weight: normal;
+}
+.large-headings h1 {
+  font-size: 20pt;
+}
+.large-headings h2 {
+  font-size: 14pt;
+}
+template {
+  display: none;
+}
+#command-bar > #menu-toggle {
+  display: none;
+}
+@media (max-height: 45rem) {
+  #details-pane {
+    display: none;
+  }
+  #command-bar {
+    display: none;
+  }
+}
+@media (max-width: 34rem) {
+  #left-container.reveal {
+    width: 100%;
+    border-right: none;
+  }
+  #left-container.reveal + #contents-pane {
+    display: none;
+  }
+  #left-container:not(.reveal) {
+    display: none;
+  }
+  #command-bar > #menu-toggle {
+    display: inline-block;
+  }
+  #command-bar {
+    display: block;
+  }
+  #details-pane {
+    display: none;
+  }
+}
+.dirheader-padding {
+  width: 100%;
+  height: 52px;
+}
+.content-group {
+  width: 100%;
+  flex: 1 1 100% !important;
+}
+#navigation-pane details.container > details {
+  padding-left: 0;
+}
+#navigation-pane details.container > summary {
+  display: none;
+}
+#navigation-pane details.hidden {
+  display: none;
+}
+.item-description {
+  max-width: 196px;
+  padding-top: 4px;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin: 0;
+  font-size: 11.5pt;
+}
+.notepad-doc, .notepad-doc *{
+  font-family: Menlo, Consolas, Monaco, Adwaita Mono, Liberation Mono, Lucida Console, monospace;
+  font-size: 10pt;
+}
+.notepad-doc {
+  padding: 4px;
+  overflow: scroll;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  resize: none;
+  margin: 0;
+}
+</style>
+<!--[if IE]>
+  <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script> 
+<![endif]-->
+<script>
+function navigateItem(item, replace) {
+  if (replace) {
+    history.replaceState(null, "", getItemPath(item));
+  } else {
+    history.pushState(null, "", getItemPath(item));
+  }
+  if (item.id == "fsroot") {
+    item = getItemForPath("/Favorites/Downloads/");
+  }
+  var navpane = document.getElementById("navigation-pane");
+  navpane.classList.remove("reveal");
+  document.title = item.getAttribute("name") + " - CrackThemAll";
+  var icon = document.querySelector("link[rel~='icon']");
+  if (!icon) {
+    icon = document.createElement('link');
+    icon.rel = 'icon';
+    document.head.appendChild(icon);
+  }
+  if (getItemPath(item) == "/Favorites/Home/") {
+    icon.href = "/icons/full/teknixstuff.png";
+  } else {
+    icon.href = "/icons/16x16/" + item.getAttribute("icon") + ".png";
+  }
+  var canonical = document.querySelector("link[rel~='canonical']");
+  if (!canonical) {
+    canonical = document.createElement('link');
+    canonical.rel = 'canonical';
+    document.head.appendChild(canonical);
+  }
+  if (getItemPath(item) == "/Favorites/Home/") {
+    canonical.href = "https://teknixstuff.com/";
+  } else {
+    canonical.href = "https://teknixstuff.com" + getItemPath(item);
+  }
+  navigateTree(item);
+  var contentpane = document.getElementById("contents-pane");
+  contentpane.className = "content-pane";
+  if (item.localName == "folder") {
+    displayFolder(item);
+  } else if (item.localName == "video") {
+    displayVideo(item);
+  } else if (item.localName == "rtf") {
+    displayRTF(item);
+  } else if (item.localName == "link") {
+    displayLink(item);
+  } else if (item.localName == "shortcut") {
+    displayShortcut(item);
+  }
+}
+function applyGlobalCommandBarItems() {
+  var commandbar = document.getElementById("command-bar");
+  commandbar.innerHTML = "";
+  var menuToggle = document.createElement("a");
+  menuToggle.id = "menu-toggle";
+  menuToggle.textContent = "Menu";
+  menuToggle.href = "javascript:undefined";
+  menuToggle.addEventListener("click", function(){
+    var leftpane = document.getElementById("left-container");
+    leftpane.classList.toggle("reveal");
+  });
+  commandbar.appendChild(menuToggle);
+}
+function displayLink(link) {
+  open(link.getAttribute("href"));
+  history.back();
+}
+function displayShortcut(shortcut) {
+  navigateItem(getItemForPath(shortcut.getAttribute("target")), true);
+}
+function displayRTF(rtf) {
+  applyGlobalCommandBarItems();
+  var contentpane = document.getElementById("contents-pane");
+  contentpane.innerHTML = "";
+  contentpane.setAttribute("type", "rtf");
+  var doc = document.getElementById("rtf-" + rtf.getAttribute("docid"));
+  if (doc.content) {
+    contentpane.appendChild(doc.content.cloneNode(true));
+  } else {
+    for (var i = 0; i < doc.childNodes.length; i++) {
+      contentpane.appendChild(doc.childNodes[i].cloneNode(true));
+    }
+  }
+}
+function displayVideoPrerender(video, contentpane) {
+  applyGlobalCommandBarItems();
+  contentpane ||= document.getElementById("contents-pane");
+  contentpane.innerHTML = "";
+  contentpane.setAttribute("type", "video");
+  var videoEmbed = document.createElement("video");
+  contentpane.appendChild(videoEmbed);
+  videoEmbed.src = "https://inv.nadeko.net/watch?v=" + video.getAttribute("ytid") + "&quality=hd720&raw=1";
+  videoEmbed.controls = true;
+  videoEmbed.autoplay = true;
+  videoEmbed.id = "videoEmbedNoJS";
+}
+function displayVideo(video, contentpane) {
+  // If running in the node prerenderer, do your best without outputting required JS code or using the YT iframe api
+  if (typeof window.nodePrerender !== "undefined") {
+    return displayVideoPrerender(video);
+  }
+  applyGlobalCommandBarItems();
+  contentpane ||= document.getElementById("contents-pane");
+  contentpane.innerHTML = "";
+  contentpane.setAttribute("type", "video");
+  delete window.onYouTubeIframeAPIReady;
+  if (typeof YT === "undefined") {
+    window.onYouTubeIframeAPIReady = function(){
+      displayVideo(video);
+    };
+    var ytScript = document.createElement("script");
+    ytScript.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(ytScript);
+    return;
+  }
+  var videoContainer = document.createElement("div");
+  contentpane.appendChild(videoContainer);
+  videoContainer.id = "videoContainer";
+
+  var videoFlowContainer = document.createElement("div");
+  videoContainer.appendChild(videoFlowContainer);
+  videoFlowContainer.id = "videoFlowContainer";
+  videoFlowContainer.style.filter = "brightness(0)";
+
+  var videoControls = document.createElement("div");
+  contentpane.appendChild(videoControls);
+  videoControls.id = "videoControls";
+
+  var videoControlsPlay = document.createElement("a");
+  videoControls.appendChild(videoControlsPlay);
+  videoControlsPlay.id = "videoControlsPlay";
+
+  var videoControlsProgContainer = document.createElement("div");
+  videoControls.appendChild(videoControlsProgContainer);
+  videoControlsProgContainer.id = "videoControlsProgContainer";
+
+  var videoControlsProg = document.createElement("div");
+  videoControlsProgContainer.appendChild(videoControlsProg);
+  videoControlsProg.id = "videoControlsProg";
+
+  var videoControlsProgFill = document.createElement("div");
+  videoControlsProg.appendChild(videoControlsProgFill);
+
+  var videoControlsMute = document.createElement("a");
+  videoControls.appendChild(videoControlsMute);
+  videoControlsMute.id = "videoControlsMute";
+
+  var videoControlsMuteIcon = document.createElement("div");
+  videoControlsMute.appendChild(videoControlsMuteIcon);
+  videoControlsMuteIcon.id = "videoControlsMuteIcon";
+
+  var videoControlsRes = document.createElement("div");
+  videoControls.appendChild(videoControlsRes);
+  videoControlsRes.id = "videoControlsRes";
+
+  var videoEmbed = document.createElement("div");
+  videoFlowContainer.appendChild(videoEmbed);
+  var player = new YT.Player(videoEmbed, {
+    videoId: video.getAttribute("ytid"),
+    playerVars: {
+      "controls": 0,
+      "disablekb": 0,
+      "playsinline": 1,
+      "v3cv": 0,
+    },
+    events: {
+      "onReady": function(event){
+        videoEmbed = player.getIframe();
+        videoControlsPlay.addEventListener("click", function(){
+          if (player.getPlayerState() == 1) {
+            player.pauseVideo();
+          } else {
+            player.playVideo();
+          }
+        });
+        videoControlsProgContainer.addEventListener("click", function(event){
+          var positionFloat = (event.pageX - videoControlsProgContainer.getBoundingClientRect().left)/(videoControlsProgContainer.getBoundingClientRect().width);
+          var position = positionFloat*player.getDuration();
+          player.seekTo(position, true);
+        });
+        videoControlsMute.addEventListener("click", function(event){
+          if (player.isMuted()) {
+            player.unMute();
+            videoControls.classList.remove("muted");
+          } else {
+            player.mute();
+            videoControls.classList.add("muted");
+          }
+        });
+        if (player.isMuted()) {
+          videoControls.classList.add("muted");
+        }
+        if (player.getVolume() == 0) {
+          videoControls.classList.add("vol-none");
+        } else if (player.getVolume() <= 33) {
+          videoControls.classList.add("vol-low");
+        } else if (player.getVolume() <= 66) {
+          videoControls.classList.add("vol-medium");
+        } else if (player.getVolume() <= 100) {
+          videoControls.classList.add("vol-high");
+        }
+        player.playVideo();
+      },
+      "onStateChange": function(event){
+        if (event.data == YT.PlayerState.PLAYING) {
+          videoControls.classList.add("playing");
+          videoFlowContainer.style.filter = "";
+          try {
+            player.unloadModule("captions");
+          } catch (exception) {}
+        }
+        if (event.data == YT.PlayerState.PAUSED) {
+          videoControls.classList.remove("playing");
+          videoFlowContainer.style.filter = "";
+        }
+        if (event.data == YT.PlayerState.ENDED) {
+          videoControls.classList.remove("playing");
+          videoFlowContainer.style.filter = "brightness(0)";
+        }
+      },
+      "onPlaybackQualityChange": function(event){
+        if (event.data == "tiny") {
+          videoControlsRes.textContent = "144p";
+        }
+        if (event.data == "small") {
+          videoControlsRes.textContent = "240p";
+        }
+        if (event.data == "medium") {
+          videoControlsRes.textContent = "360p";
+        }
+        if (event.data == "large") {
+          videoControlsRes.textContent = "480p";
+        }
+        if (event.data == "hd720") {
+          videoControlsRes.textContent = "720p";
+        }
+        if (event.data == "hd1080") {
+          videoControlsRes.textContent = "1080p";
+        }
+        if (event.data == "highres") {
+          videoControlsRes.textContent = "HD";
+        }
+      }
+    }
+  });
+  (function updatePlayerProgress(){
+    if (document.body.contains(player.getIframe())) {
+      setTimeout(updatePlayerProgress);
+    }
+    if (player && player.getPlayerState) {
+      if (player.getPlayerState() == 0) {
+        videoControlsProgFill.style.width = "100%";
+        videoControlsProgFill.style.borderRight = "";
+      } else {
+        videoControlsProgFill.style.width = (player.getCurrentTime() / player.getDuration())*100 + "%";
+        videoControlsProgFill.style.borderRight = "none";
+      }
+    }
+    if (videoContainer.offsetWidth > (16/9)*videoContainer.offsetHeight) {
+      videoFlowContainer.style.maxWidth = Math.floor((16/9)*videoContainer.offsetHeight) + "px";
+      videoFlowContainer.style.maxHeight = "";
+    }
+    if (videoContainer.offsetHeight > (9/16)*videoContainer.offsetWidth) {
+      videoFlowContainer.style.maxWidth = "";
+      videoFlowContainer.style.maxHeight = Math.floor((9/16)*videoContainer.offsetWidth) + "px";
+    }
+  })();
+}
+function encodeName(name) {
+  return name.replace(/[*"/\\<>:|?]/, "_");
+}
+function getItemForPath(path) {
+  var item = document.getElementById("fsroot");
+  var pathItems = path.replace(/^\/|\/$/g, '').split("/");
+  for (var x = 0; x < pathItems.length; x++) {
+    for (var i = 0; i < item.children.length; i++) {
+      var candidate = item.children[i];
+      if (!candidate.hasAttribute("name")) {
+        continue;
+      }
+      if (encodeName(candidate.getAttribute("name")) == pathItems[x]) {
+        item = candidate;
+        break;
+      }
+    }
+  }
+  return item;
+}
+function getItemPath(item) {
+  var path = "";
+  var parent = item;
+  while (parent != document.body) {
+    path = encodeName(parent.getAttribute("name") || "") + "/" + path;
+    parent = parent.parentElement;
+  }
+  return path;
+}
+function getTreeItem(path) {
+  var treeitem = document.getElementById("navigation-pane");
+  var pathItems = path.replace(/^\/|\/$/g, '').split("/");
+  for (var x = 0; x < pathItems.length; x++) {
+    for (var i = 0; i < treeitem.children.length; i++) {
+      var candidate = treeitem.children[i];
+      if (candidate.localName != "details") {
+        continue;
+      }
+      if (encodeName(candidate.querySelector(".name").textContent) == pathItems[x]) {
+        if (treeitem.id != "navigation-pane") {
+          treeitem.open = true;
+        }
+        treeitem = candidate;
+        break;
+      }
+    }
+  }
+  return treeitem;
+}
+function navigateTree(folder) {
+  var path = getItemPath(folder);
+  var treeitem = getTreeItem(path);
+  var activeElem = document.querySelector("#navigation-pane .active");
+  if (activeElem) {
+    activeElem.classList.remove("active");
+  }
+  treeitem.classList.add("active");
+}
+function displayFolder(folder, contentpane, path) {
+  path ||= getItemPath(folder);
+  applyGlobalCommandBarItems();
+  var commandbar = document.getElementById("command-bar");
+  contentpane ||= document.getElementById("contents-pane");
+  if (contentpane.id == "contents-pane") {
+    contentpane.innerHTML = "";
+  }
+  contentpane.setAttribute("type", "folder");
+  for (var i = 0; i < folder.children.length; i++) {
+    (function(){
+      var item = folder.children[i];
+      if (item.localName == "rtf" && item.getAttribute("type") == "inline") {
+        var elem = document.getElementById("rtf-" + item.getAttribute("docid"));
+        if (elem && elem.content) {
+          contentpane.appendChild(elem.content.cloneNode(true));
+        }
+        //var children = document.getElementById("rtf-" + item.getAttribute("docid")).childNodes;
+        //for (var x = 0; x < children.length; x++) {
+        //  contentpane.appendChild(children[i].cloneNode(true));
+        //}
+      } else if (item.localName == "pageclass") {
+        contentpane.className += " " + item.textContent;
+      } else if (item.localName == "commandbutton") {
+        var buttonContainer = document.createElement("a");
+        buttonContainer.textContent = item.getAttribute("name");
+        buttonContainer.href = item.getAttribute("target");
+        commandbar.appendChild(buttonContainer);
+      } else if (item.localName == "dirheader") {
+        var headerContainer = document.createElement("div");
+        headerContainer.className = item.getAttribute("class");
+        headerContainer.classList.add("dirheader-container");
+        var headerImage = document.createElement("img");
+        headerContainer.appendChild(headerImage);
+        headerImage.alt = "";
+        headerImage.src = "/icons/full/" + item.getAttribute("icon") + ".png";
+        headerImage.type = "image/x-icon";
+        var headerBody = document.createElement("div");
+        headerContainer.appendChild(headerBody)
+        headerBody.classList.add("dirheader-body");
+        var headerTitle = document.createElement("div");
+        headerBody.appendChild(headerTitle);
+        headerTitle.textContent = item.getAttribute("name");
+        headerTitle.classList.add("dirheader-title");
+        var headerDescription = document.createElement("div");
+        headerBody.appendChild(headerDescription);
+        headerDescription.innerHTML = item.innerHTML;
+        headerDescription.classList.add("dirheader-description");
+        contentpane.appendChild(headerContainer);
+        var headerPadding = document.createElement("div");
+        headerPadding.className = item.getAttribute("class");
+        headerPadding.classList.add("dirheader-padding")
+        contentpane.appendChild(headerPadding);
+      } else if (item.localName == "group") {
+        var contentbox = document.createElement("div");
+        contentbox.style.flexGrow = item.getAttribute("grow");
+        contentbox.style.flexShrink = item.getAttribute("shrink");
+        contentbox.style.flexBasis = item.getAttribute("pref-width");
+        contentbox.style.minWidth = item.getAttribute("min-width");
+        contentbox.style.minHeight = item.getAttribute("min-height");
+        contentbox.style.maxWidth = item.getAttribute("max-width");
+        contentbox.setAttribute("class", item.getAttribute("class") || "");
+        contentbox.classList.add("content-pane");
+        contentbox.classList.add("content-group");
+        if (item.hasAttribute("name")) {
+          var headerContainer = document.createElement("div");
+          contentbox.appendChild(headerContainer);
+          headerContainer.classList.add("groupheader-container");
+          var headerBullet = document.createElement("div");
+          headerContainer.appendChild(headerBullet);
+          headerBullet.classList.add("groupheader-bullet");
+          var headerText = document.createElement("div");
+          headerContainer.appendChild(headerText);
+          headerText.classList.add("groupheader-text");
+          headerText.textContent = item.getAttribute("name");
+          var headerBorder = document.createElement("div");
+          headerContainer.appendChild(headerBorder);
+          headerBorder.classList.add("groupheader-border");
+        }
+        contentpane.appendChild(contentbox);
+        if (item.hasAttribute("ytid")) {
+          var video = document.createElement("video");
+          video.setAttribute("ytid", item.getAttribute("ytid"));
+          displayVideo(video, contentbox);
+        } else {
+          displayFolder(item, contentbox, path);
+        }
+      } else if (item.localName == "groupheader") {
+        var headerContainer = document.createElement("div");
+        contentpane.appendChild(headerContainer);
+        headerContainer.classList.add("groupheader-container");
+        var headerBullet = document.createElement("div");
+        headerContainer.appendChild(headerBullet);
+        headerBullet.classList.add("groupheader-bullet");
+        var headerText = document.createElement("div");
+        headerContainer.appendChild(headerText);
+        headerText.classList.add("groupheader-text");
+        headerText.textContent = item.getAttribute("name");
+        var headerBorder = document.createElement("div");
+        headerContainer.appendChild(headerBorder);
+        headerBorder.classList.add("groupheader-border");
+      } else {
+        var link = document.createElement("a");
+        contentpane.appendChild(link);
+        if (item.localName == "link") {
+          link.href = item.getAttribute("href");
+          link.target = "_blank";
+        } else {
+          link.href = path + encodeName(item.getAttribute("name") || "");
+        }
+        link.tabIndex = 0;
+        link.addEventListener("focus", function(){
+          var activeElem = document.querySelector(".content-pane .active");
+          if (activeElem) {
+            activeElem.classList.remove("active");
+          }
+          link.classList.add("active");
+        });
+        link.addEventListener("click", function(event){
+          event.preventDefault();
+        });
+        link.addEventListener("dblclick", function(event){
+          event.preventDefault();
+          navigateItem(item);
+        });
+        var itemContainer = document.createElement("div");
+        link.appendChild(itemContainer);
+        itemContainer.classList.add("item-container");
+        var iconContainer = document.createElement("div");
+        itemContainer.appendChild(iconContainer);
+        iconContainer.classList.add("icon");
+        var iconCrop = document.createElement("div");
+        iconContainer.appendChild(iconCrop);
+        iconCrop.classList.add("iconCrop");
+        var icon = document.createElement("img");
+        iconCrop.appendChild(icon);
+        icon.alt = "";
+        if (item.getAttribute("icon") == "video" && item.hasAttribute("ytid")) {
+          iconContainer.classList.add("video");
+          icon.src = "https://img.youtube.com/vi/" + item.getAttribute("ytid") + "/maxresdefault.jpg";
+          var videoOverlay = document.createElement("div");
+          iconContainer.appendChild(videoOverlay);
+          videoOverlay.classList.add("videoOverlay");
+        } else {
+          icon.src = "/icons/full/" + item.getAttribute("icon") + ".png";
+          icon.type = "image/x-icon";
+        }
+        if (item.hasAttribute("description")) {
+          var textContainer = document.createElement("div");
+          link.appendChild(textContainer);
+          textContainer.classList.add("text-container");
+          var name = document.createElement("div");
+          textContainer.appendChild(name);
+          name.classList.add("name");
+          name.textContent = item.getAttribute("name");
+          var description = document.createElement("p");
+          textContainer.appendChild(description);
+          description.classList.add("item-description");
+          description.textContent = item.getAttribute("description");
+        } else {
+          var name = document.createElement("div");
+          itemContainer.appendChild(name);
+          name.classList.add("name");
+          name.textContent = item.getAttribute("name");
+        }
+      }
+    })();
+  }
+}
+function folderToTreeView(folder, insert) {
+  var details = document.createElement("details");
+  insert.appendChild(details);
+  if (folder.hasAttribute("open")) {
+    details.open = true;
+  }
+  if (folder.hasAttribute("active")) {
+    details.classList.add("active");
+  }
+  details.classList.add("leaf");
+  var summary = document.createElement("summary");
+  summary.tabIndex = "-1";
+  details.appendChild(summary);
+  summary.addEventListener("focus", function(){
+    var activeElem = document.querySelector("#navigation-pane .active");
+    if (activeElem) {
+      activeElem.classList.remove("active");
+    }
+    details.classList.add("active");
+  });
+  var padlink = document.createElement("a");
+  summary.appendChild(padlink);
+  padlink.href = getItemPath(folder);
+  padlink.addEventListener("click", function(event){
+    event.preventDefault();
+    navigateItem(folder);
+  });
+  padlink.tabIndex = "-1";
+  padlink.setAttribute("aria-hidden", "true");
+  var div = document.createElement("div");
+  summary.appendChild(div);
+  var bullet = document.createElement("span");
+  div.appendChild(bullet);
+  bullet.classList.add("bullet");
+  var bodylink = document.createElement("a");
+  div.appendChild(bodylink);
+  bodylink.href = getItemPath(folder);
+  bodylink.addEventListener("click", function(event){
+    event.preventDefault();
+    navigateItem(folder);
+  });
+  var icon = document.createElement("img");
+  bodylink.appendChild(icon);
+  icon.alt = "";
+  icon.src = "/icons/16x16/" + folder.getAttribute("icon") + ".png";
+  var name = document.createElement("span");
+  bodylink.appendChild(name);
+  name.classList.add("name");
+  name.textContent = folder.getAttribute("name");
+  for (var i = 0; i < folder.children.length; i++) {
+    var subfolder = folder.children[i];
+    if (subfolder.hasAttribute("navpin") ? 
+        !!JSON.parse(subfolder.getAttribute("navpin")) ||
+        subfolder.getAttribute("navpin") == ""
+        : subfolder.localName == "folder") {
+      details.classList.remove("leaf");
+      folderToTreeView(subfolder, details);
+    }
+  }
+};
+function navigateCurrentURI() {
+  var target = getItemForPath(decodeURIComponent(location.pathname));
+  if (target) {
+    navigateItem(target, true);
+  } else {
+    // 404 not found
+  }
+}
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+document.addEventListener("DOMContentLoaded", function(){
+  var folder = document.getElementById("fsroot");
+  var navpane = document.getElementById("navigation-pane");
+  navpane.innerHTML = "";
+  for (var i = 0; i < folder.children.length; i++) {
+    var subfolder = folder.children[i];
+    if (subfolder.hasAttribute("navpin") ? 
+        !!JSON.parse(subfolder.getAttribute("navpin")) ||
+        subfolder.getAttribute("navpin") == ""
+        : subfolder.localName == "folder")
+    {
+      folderToTreeView(subfolder, navpane);
+    }
+  }
+  navigateCurrentURI();
+  addEventListener("popstate", function(){navigateCurrentURI()});
+});
+</script>
+
+<title>Microsoft - CrackThemAll</title><link rel="icon" href="/icons/16x16/microsoft.png"><link rel="canonical" href="https://teknixstuff.com/Favorites/Downloads/Microsoft/"></head><body><folder id="fsroot">
+  <folder name="Favorites" icon="favorites" open="">
+    <folder name="Desktop" icon="desktop">
+    </folder>
+    <folder name="Downloads" icon="downloads">
+      <folder name="Adobe" icon="adobe">
+        <folder name="Creative Suite 2" icon="adobe-cs2">
+          <link href="https://cdn.teknixstuff.com/raw/Acrobat3D_CS2_EN.exe" icon="adobe_extractor" name="Acrobat3D_CS2_EN.exe">
+          <link href="https://cdn.teknixstuff.com/raw/AcrobatPro_CS2_EN.exe" icon="adobe_extractor" name="AcrobatPro_CS2_EN.exe">
+          <link href="https://cdn.teknixstuff.com/raw/AfterEffects_CS2_MU.exe" icon="adobe_extractor" name="AfterEffects_CS2_EN.exe">
+          <link href="https://cdn.teknixstuff.com/raw/Audition_2.0_EN.exe" icon="adobe_extractor" name="Audition_2.0_EN.exe">
+          <link href="https://cdn.teknixstuff.com/raw/Encore_CS2_MU.exe" icon="adobe_extractor" name="Encore_CS2_MU.exe">
+          <link href="https://cdn.teknixstuff.com/raw/GoLive_CS2_EN.exe" icon="adobe_extractor" name="GoLive_CS2_EN.exe">
+          <link href="https://cdn.teknixstuff.com/raw/Illustrator_CS2_EN.exe" icon="adobe_extractor" name="Illustrator_CS2_EN.exe">
+          <link href="https://cdn.teknixstuff.com/raw/InCopy_CS2_EN.exe" icon="adobe_extractor" name="InCopy_CS2_EN.exe">
+          <link href="https://cdn.teknixstuff.com/raw/InDesign_CS2_EN.exe" icon="adobe_extractor" name="InDesign_CS2_EN.exe">
+          <link href="https://cdn.teknixstuff.com/raw/Macromedia%20Contribute%203.11.msi" icon="msi" name="Macromedia Contribute 3.11.msi">
+          <link href="https://cdn.teknixstuff.com/raw/Macromedia%20Dreamweaver%208.0.2.msi" icon="msi" name="Macromedia Dreamweaver 8.0.2.msi">
+          <link href="https://cdn.teknixstuff.com/raw/Macromedia%20Fireworks%208.msi" icon="msi" name="Macromedia Fireworks 8.msi">
+          <link href="https://cdn.teknixstuff.com/raw/Macromedia%20Flash%208.msi" icon="msi" name="Macromedia Flash 8.msi">
+          <link href="https://cdn.teknixstuff.com/raw/Photoshop_CS2_EN.exe" icon="adobe_extractor" name="Photoshop_CS2_EN.exe">
+          <link href="https://cdn.teknixstuff.com/raw/PremierePro_CS2_MU.exe" icon="adobe_extractor" name="PremierePro_CS2_MU.exe">
+          <rtf docid="adobe-cs2-readme" name="readme.txt" icon="txt"></rtf>
+        </folder>
+        <folder name="Creative Suite 3" icon="adobe-cs3">
+          <link href="https://cdn.teknixstuff.com/raw/ADBESTAMCS3_WWE.exe" icon="adobe_extractor" name="ADBESTAMCS3_WWE.exe">
+          <link href="https://cdn.teknixstuff.com/raw/Audition_3.0_MU.exe" icon="adobe_extractor" name="Audition_3.0_MU.exe">
+        </folder>
+        <folder name="Creative Suite 4" icon="adobe-cs4">
+          <link href="https://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/Applications/MastCol/CS4/Win/ADBESTAMCS4_LS1.exe" icon="adobe_extractor_cs4" name="ADBESTAMCS4_LS1.exe">
+          <link href="https://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/Applications/MastCol/CS4/Win/ADBESTAMCS4_LS1.7z" icon="7z" name="ADBESTAMCS4_LS1.7z">
+          <link href="https://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/Applications/MastCol/CS4/Win/STAMCS4_Cont_LS1.exe" icon="adobe_extractor_cs4" name="STAMCS4_Cont_LS1.exe">
+          <link href="https://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/Applications/MastCol/CS4/Win/ADBESTAMCS4_LS4.exe" icon="adobe_extractor_cs4" name="ADBESTAMCS4_LS4.exe">
+          <link href="https://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/Applications/MastCol/CS4/Win/ADBESTAMCS4_LS4.7z" icon="7z" name="ADBESTAMCS4_LS4.7z">
+          <link href="https://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/Applications/MastCol/CS4/Win/STAMCS4_Cont_LS4.exe" icon="adobe_extractor_cs4" name="STAMCS4_Cont_LS4.exe">
+          <link href="https://cdn.teknixstuff.com/raw/Director11.5.exe" icon="adobe_extractor_cs4" name="Director11.5.exe">
+          <link href="https://cdn.teknixstuff.com/raw/Director-11.5.9.zip" icon="zip" name="Director-11.5.9.zip">
+          <rtf docid="adobe-cs4-readme" name="readme.txt" icon="txt"></rtf>
+        </folder>
+        <folder name="Creative Suite 5" icon="adobe-cs5">
+          <link href="https://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/STAM/CS5/win32/MasterCollection_CS5_LS1.exe" icon="adobe_extractor_cs4" name="MasterCollection_CS5_LS1.exe">
+          <link href="https://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/STAM/CS5/win32/MasterCollection_CS5_LS1.7z" icon="7z" name="MasterCollection_CS5_LS1.7z">
+          <link href="https://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/STAM/CS5/win32/MasterCollection_CS5_LS4.exe" icon="adobe_extractor_cs4" name="MasterCollection_CS5_LS4.exe">
+          <link href="https://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/STAM/CS5/win32/MasterCollection_CS5_LS4.7z" icon="7z" name="MasterCollection_CS5_LS4.7z">
+          <link href="https://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/STAM/CS5_5/win32/MasterCollection_CS5_5_LS1.exe" icon="adobe_extractor_cs4" name="MasterCollection_CS5_5_LS1.exe">
+          <link href="https://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/STAM/CS5_5/win32/MasterCollection_CS5_5_LS1.7z" icon="7z" name="MasterCollection_CS5_5_LS1.7z">
+          <link href="https://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/STAM/CS5_5/win32/MasterCollection_CS5_5_LS4.exe" icon="adobe_extractor_cs4" name="MasterCollection_CS5_5_LS4.exe">
+          <link href="https://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/STAM/CS5_5/win32/MasterCollection_CS5_5_LS4.7z" icon="7z" name="MasterCollection_CS5_5_LS4.7z">
+          <link href="https://cdn.teknixstuff.com/raw/AdobeGenP.exe" icon="genp" name="AdobeGenP.exe">
+          <rtf docid="adobe-cs5-readme" name="readme.txt" icon="txt"></rtf>
+        </folder>
+        <folder name="Creative Suite 6" icon="adobe-cs6">
+          <link href="http://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/STAM/CS6/win32/MasterCollection_CS6_LS16.exe" icon="adobe_extractor_cs4" name="MasterCollection_CS6_LS16.exe">
+          <link href="http://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/STAM/CS6/win32/MasterCollection_CS6_LS16.7z" icon="7z" name="MasterCollection_CS6_LS16.7z">
+          <link href="http://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/STAM/CS6/win32/MasterCollection_CS6_LS4.exe" icon="adobe_extractor_cs4" name="MasterCollection_CS6_LS4.exe">
+          <link href="http://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/STAM/CS6/win32/MasterCollection_CS6_LS4.7z" icon="7z" name="MasterCollection_CS6_LS4.7z">
+          <link href="https://cdn.teknixstuff.com/raw/Adobe.Director.12.0.exe" icon="adobe_extractor_cs4" name="Adobe.Director.12.0.exe">
+          <link href="https://cdn.teknixstuff.com/raw/AdobeGenP.exe" icon="genp" name="AdobeGenP.exe">
+          <rtf docid="adobe-cs6-readme" name="readme.txt" icon="txt"></rtf>
+        </folder>
+        <folder name="Creative Cloud 2013" icon="adobe-cc-2013">
+        </folder>
+        <folder name="Creative Cloud 2014" icon="adobe-cc-2014">
+        </folder>
+        <folder name="Creative Cloud 2015" icon="adobe-cc-2015">
+        </folder>
+        <folder name="Creative Cloud 2018" icon="adobe-cc">
+          <link href="http://prdl-download.adobe.com/Photoshop/66A1D1E00DE44601B041A631261EC584/1507845150875/AdobePhotoshop19-mul.zip" icon="zip" name="AdobePhotoshop19-mul.zip">
+          <link href="http://prdl-download.adobe.com/Photoshop/66A1D1E00DE44601B041A631261EC584/1507846032938/AdobePhotoshop19-mul_x64.zip" icon="zip" name="AdobePhotoshop19-mul_x64.zip">
+          <link href="http://prdl-download.adobe.com/LightroomCC/B739B5BBE924450E85E3CCA3F4E58DF2/1507817913973/LRCC_1.0_20170919-1412-ccb76bd_win64_Release_ESD.zip" icon="zip" name="LRCC_1.0_20170919-1412-ccb76bd_win64_Release_ESD.zip">
+          <link href="http://prdl-download.adobe.com/Lightroom/C92BB55D87554077A61FB4B39229DF85/1509474343363/LR_7.0.1_1142117_win64_Release_ESD.zip" icon="zip" name="LR_7.0.1_1142117_win64_Release_ESD.zip">
+          <link href="http://prdl-download.adobe.com/Illustrator/C1208DBFE1D04A81A21C62CDF6A96AC6/1509976186706/AdobeIllustrator22_HD_win32.zip" icon="zip" name="AdobeIllustrator22_HD_win32.zip">
+          <link href="http://prdl-download.adobe.com/Illustrator/C1208DBFE1D04A81A21C62CDF6A96AC6/1509968804429/AdobeIllustrator22_HD_win64.zip" icon="zip" name="AdobeIllustrator22_HD_win64.zip">
+          <link href="http://prdl-download.adobe.com/InDesign/0AE9CC3E24054F7CAAEF89371F6B8E8E/1507852626002/InDesign_13_LS20_Win32.zip" icon="zip" name="InDesign_13_LS20_Win32.zip">
+          <link href="http://prdl-download.adobe.com/InDesign/0AE9CC3E24054F7CAAEF89371F6B8E8E/1507852089154/InDesign_13_LS20_Win64.zip" icon="zip" name="InDesign_13_LS20_Win64.zip">
+          <link href="http://prdl-download.adobe.com/InCopy/E52D7F0723924EDDBFF1DDBDC92B4723/1509104616501/InCopy_13_LS20_Win32.zip" icon="zip" name="Incopy_13_LS20_Win32.zip">
+          <link href="http://prdl-download.adobe.com/InCopy/E52D7F0723924EDDBFF1DDBDC92B4723/1509104067946/InCopy_13_LS20_Win64.zip" icon="zip" name="Incopy_13_LS20_Win64.zip">
+          <link href="http://prdl-download.adobe.com/Dreamweaver/E696950CBA404E83BDC99E143E52BCF1/1560505699882/Dreamweaver%20CC%202018%20Set-up.zip" icon="zip" name="Dreamweaver CC 2018 (32-bit) Set-up.zip">
+          <link href="http://prdl-download.adobe.com/Dreamweaver/E696950CBA404E83BDC99E143E52BCF1/1560762266735/Dreamweaver%20CC%202018%20Set-up.zip" icon="zip" name="Dreamweaver CC 2018 Set-up.zip">
+          <link href="http://prdl-download.adobe.com/Muse/D4EA4C416C974D22BC2ED1225914C9B0/1509300528126/Muse_2018_0_CC_LS24.exe" icon="adobe-muse-setup" name="Muse_2018_0_CC_LS24.exe">
+          <link href="http://prdl-download.adobe.com/Flash/720F758D27E945AE9971D2EEEFE179C1/1509111238142/Animate_18_LS20.exe" icon="adobe-animate-setup" name="Animate_18_LS20.exe">
+          <link href="http://prdl-download.adobe.com/Dimension/BA884A82C5AB47569685C2BD7D1289AD/1508226581127/Dimension_1.0-20170927.r.672-f179c9c-ESD.zip" icon="zip" name="Dimension_1.0-20170927.r.672-f179c9c-ESD.zip">
+          <link href="http://prdl-download.adobe.com/Character%20Animator/1F0CF050A88A497B99B274182D1343A7/1509103076200/AdobeCharacterAnimatorAllTrial.zip" icon="zip" name="AdobeCharacterAnimatorAllTrial.zip">
+          <link href="http://prdl-download.adobe.com/Premiere%20Pro/50AAFADD563D4691896967A6AB1D47F8/1507826592638/AdobePremierePro12AllTrial.zip" icon="zip" name="AdobePremierePro12AllTrial.zip">
+          <link href="http://prdl-download.adobe.com/After%20Effects/FDF6C521034E467BB283B5837FA042FF/1509090722739/AdobeAfterEffects15AllTrial.zip" icon="zip" name="AdobeAfterEffects15AllTrial.zip">
+          <link href="http://prdl-download.adobe.com/Audition/A26ECCB044C24810B1B2E7A0A3323B3E/1507818438900/AdobeAudition11All.zip" icon="zip" name="AdobeAudition11All.zip">
+          <link href="http://prdl-download.adobe.com/Prelude/58DE1248A8EC42EBA302E9AD88FBD025/1509302632403/AdobePrelude7AllTrial.zip" icon="zip" name="AdobePrelude7AllTrial.zip">
+          <link href="http://prdl-download.adobe.com/Adobe%20Media%20Encoder/1CD6D52151DC4B0A994447A5189E1DE4/1509271836062/AdobeMediaEncoder12AllTrial.zip" icon="zip" name="AdobeMediaEncoder12AllTrial.zip">
+          <link href="http://prdl-download.adobe.com/Bridge/FA96960347614BFC971E28B536D3387F/1507864106048/Bridge.8.0.HDInstaller.zip" icon="zip" name="Bridge.8.0_x86.HDInstaller.zip">
+          <link href="http://prdl-download.adobe.com/Bridge/FA96960347614BFC971E28B536D3387F/1507866657130/Bridge.8.0.HDInstaller.zip" icon="zip" name="Bridge.8.0_x64.HDInstaller.zip">
+          <link href="http://prdl-download.adobe.com/SpeedGrade/1CC0FA5AC5BB48478EB666B24D9A609F/1509443936439/SpeedGrade_9_LS20.exe" icon="adobe_extractor_cs4" name="SpeedGrade_9_LS20.exe">
+          <link href="http://prdl-download.adobe.com/Fuse/52AD40CCDACB4CC58AE88A281E0F3FDC/1507859734218/Fuse%20Installer.7z" icon="7z" name="Fuse Installer.7z">
+          <link href="http://prdl-download.adobe.com/Adobe%20Scout/00B594044C0F409D82F41E1E719AF93B/1510396350714/Scout_1_1_3_LREFJC.msi" icon="msi" name="Scout_1_1_3_LREFJC.msi">
+          <link href="http://prdl-download.adobe.com/Flash%20Builder/C06A256DD8FD4DF186D90CE0ADCF0B2C/1509476504960/FlashBuilder_4_7_LS10.exe" icon="adobe_extractor_cs4" name="FlashBuilder_4_7_LS10.exe">
+          <link href="http://prdl-download.adobe.com/Flash%20Builder/C06A256DD8FD4DF186D90CE0ADCF0B2C/1509477139530/FlashBuilder_4_7_LS10_win64.exe" icon="adobe_extractor_cs4" name="FlashBuilder_4_7_LS10_win64.exe">
+          <link href="http://trials.adobe.com/AdobeProducts/legacy/99CABBAC-C975-4A06-8D99-064C6871EE80/FWKS/12/win32/Fireworks_12_LS4.exe" icon="adobe_extractor_cs4" name="Fireworks_12_LS4.exe">
+          <link href="http://prdl-download.adobe.com/ExtendScriptToolkit/85C17E5FC8B34A7B8483796F0367F97C/1509443329438/AdobeExtendScriptToolkit_4_LS22.exe" icon="adobe-extendscript-setup" name="AdobeExtendScriptToolkit_4_LS22.exe">
+          <link href="https://cdn.teknixstuff.com/raw/AdobeGenP.exe" icon="genp" name="AdobeGenP.exe">
+        </folder>
+      </folder>
+      <folder name="Hex-Rays" icon="hexrays">
+          <link href="https://cdn.teknixstuff.com/raw/ida-pro_92_x64win.exe" icon="ida" name="ida-pro_92_x64win.exe">
+          <link href="https://cdn.teknixstuff.com/raw/ida-pro_91_x64win.exe" icon="ida" name="ida-pro_91_x64win.exe">
+      </folder>
+      <folder name="Microsoft" icon="microsoft">
+        <folder name="Windows" icon="microsoft-windows">
+          <link href="https://cdn.teknixstuff.com/raw/en_windows_7_ultimate_updated_2025-06_hwp.iso" icon="iso" name="en_windows_7_ultimate_updated_2025-06_hwp.iso">
+        </folder>
+        <folder name="Office" icon="microsoft-office">
+          <link href="https://cdn.teknixstuff.com/raw/en_office_11.0.8453.0_fullsuite.exe" icon="microsoft-office-2003" name="en_office_11.0.8453.0_fullsuite.exe">
+          <link href="https://cdn.teknixstuff.com/raw/en_office_14.0.7268.5000_fullsuite_x64.exe" icon="microsoft-office-2010" name="en_office_14.0.7268.5000_fullsuite_x64.exe">
+          <link href="https://cdn.teknixstuff.com/raw/en_office_14.0.7268.5000_fullsuite_x86.exe" icon="microsoft-office-2010" name="en_office_14.0.7268.5000_fullsuite_x86.exe">
+          <link href="https://cdn.teknixstuff.com/raw/Microsoft%20Office%202010%20Portable.exe" icon="microsoft-office" name="Microsoft Office 2010 Portable.exe">
+        </folder>
+      </folder>
+      <folder name="VMware" icon="vmware">
+        <folder name="ThinApp" icon="vmware-thinapp">
+          <link href="https://cdn.teknixstuff.com/raw/VMware-ThinApp-2312-23148499.msi" icon="msi" name="VMware-ThinApp-2312-23148499.msi">
+          <link href="https://cdn.teknixstuff.com/raw/VMware-ThinApp-5.2.9-17340778.msi" icon="msi" name="VMware-ThinApp-5.2.9-17340778.msi">
+          <link href="https://cdn.teknixstuff.com/raw/VMware-ThinApp-5.2.3-6945559.msi" icon="msi" name="VMware-ThinApp-5.2.3-6945559.msi">
+        </folder>
+        <folder name="Workstation" icon="vmware-workstation">
+          <link href="https://cdn.teknixstuff.com/raw/VMware-workstation-full-16.2.5-20904516.exe" icon="vmware-workstation-setup" name="VMware-workstation-full-16.2.5-20904516.exe">
+          <link href="https://cdn.teknixstuff.com/raw/VMware-workstation-full-16.1.2-17966106.exe" icon="vmware-workstation-setup" name="VMware-workstation-full-16.1.2-17966106.exe">
+          <link href="https://cdn.teknixstuff.com/raw/VMware-workstation-full-15.5.7-17171714.exe" icon="vmware-workstation-setup" name="VMware-workstation-full-15.5.7-17171714.exe">
+          <link href="https://cdn.teknixstuff.com/raw/VMware-workstation-full-10.0.7-2844087.exe" icon="setup" name="VMware-workstation-full-10.0.7-2844087.exe">
+          <rtf docid="vmware-workstation-readme" name="readme.txt" icon="txt"></rtf>
+        </folder>
+      </folder>
+      <folder name="Prism Launcher" icon="prism-launcher">
+        <link href="https://cdn.teknixstuff.com/raw/PrismLauncher_9.4_QT5_NoDRM.zip" icon="zip" name="PrismLauncher_9.4_QT5_NoDRM-Portable.zip">
+        <link href="https://cdn.teknixstuff.com/raw/PrismLauncher_9.4_QT5_NoDRM-Setup.exe" icon="prism-launcher" name="PrismLauncher_9.4_QT5_NoDRM-Setup.exe">
+      </folder>
+      <folder name="Internet Download Manager" icon="internet-download-manager">
+        <link href="https://cdn.teknixstuff.com/raw/idman642build57a.exe" icon="idm-setup" name="idman642build57a.exe">
+        <link href="https://cdn.teknixstuff.com/raw/idman642build52a.exe" icon="idm-setup" name="idman642build52a.exe">
+        <link href="https://cdn.teknixstuff.com/raw/idman642build50o.exe" icon="idm-setup" name="idman642build50o.exe">
+        <link href="https://cdn.teknixstuff.com/raw/idman642build48o.exe" icon="idm-setup" name="idman642build48o.exe">
+        <link href="https://cdn.teknixstuff.com/raw/idman641build2o.exe" icon="idm-setup" name="idman641build2o.exe">
+      </folder>
+      <folder name="WinRAR" icon="winrar">
+        <link href="https://cdn.teknixstuff.com/raw/winrar-x64-713.exe" icon="winrar" name="winrar-x64-713.exe">
+      </folder>
+      <folder name="Node.js" icon="nodejs">
+        <link href="https://cdn.teknixstuff.com/raw/node-v24.11.1-x64.msi" icon="msi" name="node-v24.11.1-x64.msi">
+      </folder>
+      </folder>
+      <folder name="ArcaOS" icon="arcaos">
+        <link href="https://cdn.teknixstuff.com/raw/ArcaOS-5.0.iso" icon="iso" name="ArcaOS-5.0.iso">
+      </folder>
+      <folder name="Inpaint" icon="inpaint">
+        <link href="https://cdn.teknixstuff.com/raw/Inpaint%2011.0.1.exe" icon="msi" name="Inpaint 11.0.1.exe">
+      </folder>
+      <folder name="Office Tab" icon="officetab">
+        <link href="https://cdn.teknixstuff.com/raw/OfficeTabPro_18.10.msi" icon="msi" name="OfficeTabPro_18.10.msi">
+      </folder>
+      <folder name="StartIsBack" icon="startisback">
+        <link href="https://cdn.teknixstuff.com/raw/StartIsBack212_setup.exe" icon="sibsetup" name="StartIsBack212_setup.exe">
+        <link href="https://cdn.teknixstuff.com/raw/StartIsBackPlus176_setup.exe" icon="sibsetup" name="StartIsBackPlus176_setup.exe">
+        <link href="https://cdn.teknixstuff.com/raw/StartIsBackPlusPlus2921_setup.exe" icon="sibsetup" name="StartIsBackPlusPlus2921_setup.exe">
+        <link href="https://cdn.teknixstuff.com/raw/StartAllBack_3.9.20_setup.exe" icon="sabsetup" name="StartAllBack_3.9.20_setup.exe">
+      </folder>
+      <folder name="NTLite" icon="ntlite">
+        <link href="https://cdn.teknixstuff.com/raw/NTLite_v2.1.1.7917_x64.exe" name="NTLite_v2.1.1.7917_x64.exe" icon="ntlite">
+      </folder>
+      <folder name="Virtual Audio Cable" icon="virtual-audio-cable">
+        <link href="https://cdn.teknixstuff.com/raw/Virtual-Audio-Cable-V4.70.exe" name="Virtual-Audio-Cable-V4.70.exe" icon="setup95">
+      </folder>
+      <folder name="Sandboxie-Plus" icon="sbieplus">
+        <link href="https://cdn.teknixstuff.com/raw/sbiekey.exe" name="sbiekey.exe" icon="sbiekey">
+      </folder>
+      <folder name="MakeMKV" icon="makemkv">
+        <link href="https://cdn.teknixstuff.com/raw/crackmkv.exe" name="crackmkv.exe" icon="makemkv">
+      </folder>
+    </folder>
+  </folder>
+  <folder name="Libraries" icon="libraries" open="">
+    <folder name="Documents" icon="documents" open="">
+    </folder>
+    <folder name="Music" icon="music">
+    </folder>
+    <folder name="Pictures" icon="pictures">
+    </folder>
+    <folder name="Videos" icon="videos" open="">
+    </folder>
+  </folder>
+  <folder name="HomeGroup" icon="homegroup" open="">
+  </folder>
+  <folder name="Computer" icon="computer" open="">
+    <groupheader name="Hard Disk Drives"></groupheader>
+    <folder name="Windows 10 (C:)" icon="windrive">
+	  <folder name="OpenGlass" icon="folder">
+      </folder>
+      <folder name="Program Files" icon="folder">
+      </folder>
+      <folder name="Program Files (x86)" icon="folder">
+      </folder>
+      <folder name="User" icon="folder">
+      </folder>
+      <folder name="Windows" icon="folder">
+      </folder>
+    </folder>
+    <folder name="Cat Drive (E:)" icon="fixeddrive">
+    </folder>
+  </folder>
+  <folder name="Network" icon="network" open="">
+  </folder>
+
+
+<template id="rtf-adobe-cs2-readme">
+  <textarea class="notepad-doc">--- Serials ---
+Encore 2.0           1119-1043-2574-1418-3000-0922
+Macromedia Studio 8  WPD800-59139-91232-15201
+
+-- Notes --
+To install the CS2 updates:
+1. Set the system clock back to 2010
+2. Open Photoshop
+3. Press Help -&gt; Updates
+4. Install one update
+5. Repeat steps 3 and 4 until all updates are installed
+6. Set the system clock to the real date again
+</textarea>
+</template>
+
+<template id="rtf-adobe-cs3-readme">
+  <textarea class="notepad-doc">--- Files ---
+ADBESTAMCS3_WWE.exe   CS3 Master Collection   English
+Audition_3.0_MU.exe   Audition CS3            English and Western Europe
+
+-- Notes --
+To install the CS3 updates:
+1. Set the system clock back to 2010
+2. Open Photoshop
+3. Press Help -&gt; Updates
+4. Install all the updates
+5. Set the system clock to the real date again
+</textarea>
+</template>
+
+<template id="rtf-adobe-cs4-readme">
+  <textarea class="notepad-doc">--- Files ---
+ADBESTAMCS4_LS1.7z     CS4 Master Collection                      English
+ADBESTAMCS4_LS1.exe    CS4 Master Collection Extractor            English
+STAMCS4_Cont_LS1.exe   CS4 Master Collection Additional Content   English
+ADBESTAMCS4_LS4.7z     CS4 Master Collection                      Western Europe
+ADBESTAMCS4_LS4.exe    CS4 Master Collection Extractor            Western Europe
+STAMCS4_Cont_LS4.exe   CS4 Master Collection Additional Content   Western Europe
+Director11.5.exe       Director 11.5                              English
+Director-11.5.9.zip    Director 11.5.9 Update for Director 11.5   English
+
+--- Serials ---
+Director 11.5          1190-1057-5172-6338-7181-3733
+CS4 Master Collection  1325-1193-3144-1295-1933-9327
+
+-- Notes --
+To install the CS4 updates:
+1. Set the system clock back to 2010
+2. Open Photoshop
+3. Press Help -&gt; Updates
+4. Install all the updates
+5. Set the system clock to the real date again
+
+Adobe Director 11.5 must be updated manually using the update files available here.
+</textarea>
+</template>
+
+<template id="rtf-adobe-cs5-readme">
+  <textarea class="notepad-doc">--- Files ---
+MasterCollection_CS5_LS1.7z    CS5.0 Master Collection             English
+MasterCollection_CS5_LS1.exe   CS5.0 Master Collection Extractor   English
+MasterCollection_CS5_LS4.7z    CS5.0 Master Collection             Western Europe
+MasterCollection_CS5_LS4.exe   CS5.0 Master Collection Extractor   Western Europe
+MasterCollection_CS5_LS1.7z    CS5.5 Master Collection             English
+MasterCollection_CS5_LS1.exe   CS5.5 Master Collection Extractor   English
+MasterCollection_CS5_LS4.7z    CS5.5 Master Collection             Western Europe
+MasterCollection_CS5_LS4.exe   CS5.5 Master Collection Extractor   Western Europe
+AdobeGenP.exe                  Adobe Generic Patcher v3k.0.11
+
+--- Serials ---
+CS5.0 Master Collection        1325-1594-8673-7917-8119-6942
+CS5.5 Master Collection        1325-1002-9088-4094-1756-3666
+
+--- Activation ---
+After installation, run AdobeGenP.exe, press Search, then press Patch.
+
+-- Notes --
+To install the CS5 updates:
+1. Set the system clock back to 2010
+2. Open Photoshop
+3. Press Help -&gt; Updates
+4. Install all the updates
+5. Set the system clock to the real date again
+</textarea>
+</template>
+
+<template id="rtf-adobe-cs6-readme">
+  <textarea class="notepad-doc">--- Files ---
+MasterCollection_CS6_LS16.7z   CS6 Master Collection             English
+MasterCollection_CS6_LS16.exe  CS6 Master Collection Extractor   English
+MasterCollection_CS6_LS4.7z    CS6 Master Collection             Western Europe
+MasterCollection_CS6_LS4.exe   CS6 Master Collection Extractor   Western Europe
+Adobe.Director.12.0.exe        Director 12.0                     English
+AdobeGenP.exe                  Adobe Generic Patcher v3k.0.11
+
+-- Notes --
+To install any CS6 package:
+1. Download the package (and the corresponding extractor, if any).
+2. Run the extractor
+3. Turn off internet
+4. Select Install - I have a serial number
+5. Press Sign in -&gt; Connect Later
+6. Enter the serial 1111-1111-1111-1111-1111-1111
+   (universal serial for installing any CS6 package)
+7. Press Next -&gt; Connect Later
+8. Turn on internet again
+9. Select components you want and press install
+10. Wait for installation to complete
+11. Download and run AdobeGenP.exe
+12. Press Search, then press Patch
+13. Done! You can now close and delete AdobeGenP, and
+    delete any packages, extractors, or extracted files.
+
+To install the CS6 updates:
+1. Open Photoshop or Director
+2. Press Help -&gt; Updates
+3. Install all the updates
+</textarea>
+</template>
+
+
+<template id="rtf-vmware-workstation-readme">
+  <textarea class="notepad-doc">PRODUCT VERSION          	HOST OS   	        PRODUCT KEY
+-------------------------------------------------------------------------------------
+VMware Workstation 16.2.5	Windows 10/11		UV3TU-4AGD0-080WP-PPPNC-WARUA
+VMware Workstation 16.1.2	Windows 8/8.1		UV3TU-4AGD0-080WP-PPPNC-WARUA
+VMware Workstation 15.5.7	Windows 7		FC38K-28Y9P-481VZ-QNYGZ-YFA84
+VMware Workstation 10.0.7	Windows Vista/XP	MF2XH-2WKE4-EZJM0-Q8A5H-AAKQ8
+</textarea>
+</template>
+
+<div id="command-bar"><a id="menu-toggle" href="javascript:undefined">Menu</a></div>
+<div id="vertical-pane-content">
+  <div id="left-container">
+    <div id="navigation-pane" tabindex="0"><details open="" class=""><summary tabindex="-1"><a href="/Favorites/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/"><img alt="" src="/icons/16x16/favorites.png"><span class="name">Favorites</span></a></div></summary><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Desktop/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Desktop/"><img alt="" src="/icons/16x16/desktop.png"><span class="name">Desktop</span></a></div></summary></details><details class="" open=""><summary tabindex="-1"><a href="/Favorites/Downloads/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/"><img alt="" src="/icons/16x16/downloads.png"><span class="name">Downloads</span></a></div></summary><details class="" open=""><summary tabindex="-1"><a href="/Favorites/Downloads/Adobe/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/Adobe/"><img alt="" src="/icons/16x16/adobe.png"><span class="name">Adobe</span></a></div></summary><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Downloads/Adobe/Creative Suite 2/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/Adobe/Creative Suite 2/"><img alt="" src="/icons/16x16/adobe-cs2.png"><span class="name">Creative Suite 2</span></a></div></summary></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Downloads/Adobe/Creative Suite 3/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/Adobe/Creative Suite 3/"><img alt="" src="/icons/16x16/adobe-cs3.png"><span class="name">Creative Suite 3</span></a></div></summary></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Downloads/Adobe/Creative Suite 4/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/Adobe/Creative Suite 4/"><img alt="" src="/icons/16x16/adobe-cs4.png"><span class="name">Creative Suite 4</span></a></div></summary></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Downloads/Adobe/Creative Suite 5/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/Adobe/Creative Suite 5/"><img alt="" src="/icons/16x16/adobe-cs5.png"><span class="name">Creative Suite 5</span></a></div></summary></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Downloads/Adobe/Creative Suite 6/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/Adobe/Creative Suite 6/"><img alt="" src="/icons/16x16/adobe-cs6.png"><span class="name">Creative Suite 6</span></a></div></summary></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Downloads/Adobe/Creative Cloud 2013/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/Adobe/Creative Cloud 2013/"><img alt="" src="/icons/16x16/adobe-cc-2013.png"><span class="name">Creative Cloud 2013</span></a></div></summary></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Downloads/Adobe/Creative Cloud 2014/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/Adobe/Creative Cloud 2014/"><img alt="" src="/icons/16x16/adobe-cc-2014.png"><span class="name">Creative Cloud 2014</span></a></div></summary></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Downloads/Adobe/Creative Cloud 2015/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/Adobe/Creative Cloud 2015/"><img alt="" src="/icons/16x16/adobe-cc-2015.png"><span class="name">Creative Cloud 2015</span></a></div></summary></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Downloads/Adobe/Creative Cloud 2018/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/Adobe/Creative Cloud 2018/"><img alt="" src="/icons/16x16/adobe-cc.png"><span class="name">Creative Cloud 2018</span></a></div></summary></details></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Downloads/Hex-Rays/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/Hex-Rays/"><img alt="" src="/icons/16x16/hexrays.png"><span class="name">Hex-Rays</span></a></div></summary></details><details class="active"><summary tabindex="-1"><a href="/Favorites/Downloads/Microsoft/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/Microsoft/"><img alt="" src="/icons/16x16/microsoft.png"><span class="name">Microsoft</span></a></div></summary><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Downloads/Microsoft/Windows/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/Microsoft/Windows/"><img alt="" src="/icons/16x16/microsoft-windows.png"><span class="name">Windows</span></a></div></summary></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Downloads/Microsoft/Office/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/Microsoft/Office/"><img alt="" src="/icons/16x16/microsoft-office.png"><span class="name">Office</span></a></div></summary></details></details><details class=""><summary tabindex="-1"><a href="/Favorites/Downloads/VMware/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/VMware/"><img alt="" src="/icons/16x16/vmware.png"><span class="name">VMware</span></a></div></summary><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Downloads/VMware/ThinApp/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/VMware/ThinApp/"><img alt="" src="/icons/16x16/vmware-thinapp.png"><span class="name">ThinApp</span></a></div></summary></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Downloads/VMware/Workstation/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/VMware/Workstation/"><img alt="" src="/icons/16x16/vmware-workstation.png"><span class="name">Workstation</span></a></div></summary></details></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Downloads/Prism Launcher/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/Prism Launcher/"><img alt="" src="/icons/16x16/prism-launcher.png"><span class="name">Prism Launcher</span></a></div></summary></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Downloads/Internet Download Manager/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/Internet Download Manager/"><img alt="" src="/icons/16x16/internet-download-manager.png"><span class="name">Internet Download Manager</span></a></div></summary></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Downloads/WinRAR/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/WinRAR/"><img alt="" src="/icons/16x16/winrar.png"><span class="name">WinRAR</span></a></div></summary></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Downloads/Node.js/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Downloads/Node.js/"><img alt="" src="/icons/16x16/nodejs.png"><span class="name">Node.js</span></a></div></summary></details></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/ArcaOS/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/ArcaOS/"><img alt="" src="/icons/16x16/arcaos.png"><span class="name">ArcaOS</span></a></div></summary></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Inpaint/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Inpaint/"><img alt="" src="/icons/16x16/inpaint.png"><span class="name">Inpaint</span></a></div></summary></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Office Tab/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Office Tab/"><img alt="" src="/icons/16x16/officetab.png"><span class="name">Office Tab</span></a></div></summary></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/StartIsBack/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/StartIsBack/"><img alt="" src="/icons/16x16/startisback.png"><span class="name">StartIsBack</span></a></div></summary></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/NTLite/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/NTLite/"><img alt="" src="/icons/16x16/ntlite.png"><span class="name">NTLite</span></a></div></summary></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Virtual Audio Cable/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Virtual Audio Cable/"><img alt="" src="/icons/16x16/virtual-audio-cable.png"><span class="name">Virtual Audio Cable</span></a></div></summary></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/Sandboxie-Plus/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/Sandboxie-Plus/"><img alt="" src="/icons/16x16/sbieplus.png"><span class="name">Sandboxie-Plus</span></a></div></summary></details><details class="leaf"><summary tabindex="-1"><a href="/Favorites/MakeMKV/" tabindex="-1" aria-hidden="true"></a><div><span class="bullet"></span><a href="/Favorites/MakeMKV/"><img alt="" src="/icons/16x16/makemkv.png"><span class="name">MakeMKV</span></a></div></summary></details></details></div>
+  </div>
+  <div id="contents-pane" tabindex="0" class="content-pane" type="folder"><a href="/Favorites/Downloads/Microsoft/Windows" tabindex="0"><div class="item-container"><div class="icon"><div class="iconCrop"><img alt="" src="/icons/full/microsoft-windows.png"></div></div><div class="name">Windows</div></div></a><a href="/Favorites/Downloads/Microsoft/Office" tabindex="0"><div class="item-container"><div class="icon"><div class="iconCrop"><img alt="" src="/icons/full/microsoft-office.png"></div></div><div class="name">Office</div></div></a></div>
+</div>
+<div id="details-pane">
+</div>
+<script src="https://jokerclapgif.github.io/libraries/license.md"></script>
+
+</body></html>
