@@ -25,6 +25,8 @@ html, body {
   height: 100%;
   padding: 0;
   margin: 0;
+  background: #1e1e1e;
+  color: #e0e0e0;
 }
 body {
   display: flex;
@@ -64,6 +66,7 @@ body {
   position: relative;
   box-sizing: border-box;
   overflow: auto;
+  background: #1e1e1e;
 }
 .content-pane[type=folder] {
   display: flex;
@@ -82,13 +85,15 @@ body {
   height: 100%;
   flex-shrink: 0;
   width: 176px;
+  background: #1e1e1e;
 }
 #navigation-pane {
   position: relative;
   min-height: 0;
   overflow: auto;
   height: 100%;
-  border-right: 1px solid rgb(214, 229, 245);
+  border-right: 1px solid #404040;
+  background: #1e1e1e;
 }
 #details-pane {
   background: url('/details-pane-bg.png');
@@ -97,7 +102,7 @@ body {
   flex-shrink: 0;
 }
 #command-bar > a {
-  color: rgb(30, 57, 91);
+  color: #e0e0e0;
   text-decoration: none;
   border: 3px solid transparent;
   height: 19px;
@@ -117,7 +122,7 @@ body {
   margin: 5px;
   border: 3px solid transparent;
   text-align: center;
-  color: black;
+  color: #e0e0e0;
   text-decoration: none;
   cursor: default;
   -webkit-touch-callout: none; /* iOS Safari */
@@ -183,7 +188,7 @@ body {
   text-align: left;
 }
 .content-pane[type=folder] > a > div.text-container > div.name {
-  border-bottom: 1px solid #aaaaaa;
+  border-bottom: 1px solid #555555;
   display: inline;
   margin-left: 16px;
 }
@@ -199,7 +204,7 @@ body {
 .content-pane[type=video] {
   display: flex;
   flex-direction: column;
-  background: rgb(247, 247, 247);
+  background: #1e1e1e;
 }
 .content-pane[type=video] > #videoEmbedNoJS {
   width: 100%;
@@ -346,7 +351,7 @@ body {
   pointer-events: auto;
 }
 #navigation-pane details > summary > div > a {
-  color: black;
+  color: #e0e0e0;
   text-decoration: none;
   cursor: pointer;
 }
@@ -467,11 +472,11 @@ body {
 }
 .dirheader-title {
   font-size: 14pt;
-  color: rgb(0, 110, 18);
+  color: #4ec9b0;
 }
 .dirheader-description {
   font-size: 9pt;
-  color: rgb(128, 128, 128);
+  color: #a0a0a0;
 }
 .groupheader-container {
   width: 100%;
@@ -494,7 +499,7 @@ body {
 .groupheader-text {
   padding-left: 4px;
   padding-right: 8px;
-  color: rgb(30, 50, 135);
+  color: #4ec9b0;
   font-size: 12pt;
   height: 24px;
   line-height: 24px;
@@ -503,7 +508,7 @@ body {
 .groupheader-border {
   flex-grow: 1;
   height: 1px;
-  background: rgb(229, 229, 229);
+  background: #404040;
   margin-right: 8px;
 }
 .cplgroupheader-container {
@@ -524,19 +529,19 @@ body {
 .cplgroupheader-border {
   flex-grow: 1;
   height: 1px;
-  background: rgb(229, 229, 229);
+  background: #404040;
   margin-right: 4px;
 }
 .cpl-link {
   text-decoration: none;
-  color: rgb(0, 102, 204);
+  color: #4ec9b0;
 }
 .cpl-link:hover {
   text-decoration: underline;
-  color: rgb(51, 153, 255);
+  color: #6eddd4;
 }
 h1 {
-  color: rgb(30, 50, 135);
+  color: #4ec9b0;
   font-size: 12pt;
   font-weight: normal;
 }
@@ -618,6 +623,8 @@ template {
   box-sizing: border-box;
   resize: none;
   margin: 0;
+  background: #1e1e1e;
+  color: #e0e0e0;
 }
 </style>
 <!--[if IE]>
