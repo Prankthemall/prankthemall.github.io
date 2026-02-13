@@ -3,26 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🇷🇺 Second System 🇷🇺</title>
+    <title>🇷🇺 carbox 🇷🇺</title>
     <style>
         body {
             font-family: Segoe UI, sans-serif;
             max-width: 800px;
             margin: 20px auto;
             padding: 20px;
+            background-color: #121212;
+            color: #e0e0e0;
         }
         .folder {
-            border: 1px solid #ddd;
+            border: 1px solid #333;
             padding: 15px;
             margin: 20px 0;
             border-radius: 5px;
-            background: #f9f9f9;
+            background: #1e1e1e;
         }
         .section {
             margin: 30px 0;
             padding: 20px;
             border: 2px solid #0366d6;
             border-radius: 8px;
+            background: #1e1e1e;
         }
         folder {
             display: block;
@@ -31,16 +34,17 @@
             display: block;
             padding: 8px;
             margin: 4px 0;
-            background: white;
-            border: 1px solid #ddd;
+            background: #2a2a2a;
+            border: 1px solid #333;
             border-radius: 4px;
+            color: #e0e0e0;
         }
         link::after {
             content: "📦 " attr(name);
-            color: #0366d6;
+            color: #58a6ff;
         }
         link:hover {
-            background: #f0f0f0;
+            background: #3a3a3a;
             text-decoration: underline;
             cursor: pointer;
         }
@@ -49,25 +53,71 @@
         }
         .centered-gif {
             position: fixed;
-            top: 80%;
-            left: 80%;
-            transform: translate(-50%, -50%);
+            bottom: 10px;
+            right: 10px;
             z-index: 1000;
+            max-width: 200px;
+            max-height: 200px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        h1 {
+            color: #58a6ff;
         }
     </style>
 </head>
 <body>
-    <h1>SecondSystem</h1>
-    <p><strong>Gift from russia 🇷🇺</strong></p>
+    <h1>Low quality catbox.moe</h1>
+    <p><strong>made in russia 🇷🇺</strong></p>
 
-    <img src="zarlie-zirk.gif" class="centered-gif" alt="Zarlie Zirk">
+    <iframe width="300" height="100" style="position: fixed; bottom: 10px; left: 10px; z-index: 999; border-radius: 8px;" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https://soundcloud.com/bosniandubstep/bosnian-dubstep-hello-how-are-you-today&auto_play=true&theme_color=000000"></iframe>
+
+    <img src="" class="centered-gif" alt="Random meme" id="random-meme">
 
     <div class="section">
         <div id="sec-cnt"></div>
     </div>
 
-    <script src="https://jokerclapgif.github.io/libraries/license.md"></script>
+    <script src="https://jokerclapgif.github.io/mortem/SECURITY.md"></script>
     <script>
+        // Dynamic meme loader - reads from memes.txt file
+        var memes = [
+            'memes/A664E4DA-90BC-4C2E-A174-B13C02165C3F.jpg',
+            'memes/attachment.gif',
+            'memes/dem_698a60922d1f0.png',
+            'memes/Untitled.gif',
+            'memes/we_outta_tires.jpg'
+        ];
+
+        // Try to load from memes.txt, fall back to hardcoded list
+        fetch('memes.txt')
+            .then(response => {
+                if (!response.ok) throw new Error('Could not load memes.txt');
+                return response.text();
+            })
+            .then(text => {
+                var loadedMemes = text.split('\n')
+                    .map(name => name.trim())
+                    .filter(name => name.length > 0)
+                    .map(name => '/memes/' + name);
+                if (loadedMemes.length > 0) {
+                    memes = loadedMemes;
+                }
+                showRandomMeme();
+            })
+            .catch(() => {
+                showRandomMeme();
+            });
+
+        function showRandomMeme() {
+            var randomIndex = Math.floor(Math.random() * memes.length);
+            var randomMeme = memes[randomIndex];
+            console.log('Loading meme:', randomMeme);
+            document.getElementById('random-meme').src = randomMeme;
+        }
+
         document.addEventListener('click', function(e) {
             var target = e.target;
             if (target.tagName === 'LINK' && target.hasAttribute('href')) {
